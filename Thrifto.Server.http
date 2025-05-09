@@ -1,0 +1,6 @@
+@Thrifto.Server_HostAddress = http://localhost:5275
+
+GET {{Thrifto.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
