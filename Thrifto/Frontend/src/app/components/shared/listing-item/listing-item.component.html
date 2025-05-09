@@ -1,0 +1,12 @@
+<!-- src/app/components/shared/listing-item/listing-item.component.html -->
+<div class="listing-item" (click)="viewDetails()">
+  <div class="listing-image">
+    <img [src]="getImageUrl(listing.mainPhotoUrl)" alt="{{ listing.title }}">
+  </div>
+  <div class="listing-details">
+    <h3>${{ listing.price }}</h3>
+    <h4>{{ listing.title }}</h4>
+    <p class="size">{{ listing.measurement }}</p>
+    <p class="quality">{{ listing.quality }}</p>
+  </div>
+</div>

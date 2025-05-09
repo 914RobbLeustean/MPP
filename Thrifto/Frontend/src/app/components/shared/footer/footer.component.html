@@ -1,0 +1,89 @@
+<!-- src/app/components/shared/footer/footer.component.html -->
+<footer class="footer small-footer">
+  <div class="footer-waves">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 10">
+      <path fill="#f8fafc" fill-opacity="1"
+            d="M0,288L48,272C96,256,192,224,288,213.3C384,203,480,213,576,229.3C672,245,768,267,864,261.3C960,256,1056,224,1152,218.7C1248,213,1344,235,1392,245.3L1440,256L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z">
+      </path>
+    </svg>
+  </div>
+
+  <div class="container">
+    <div class="footer-grid">
+      <!-- Brand Column -->
+      <div class="footer-brand">
+        <h2>Thrifto</h2>
+        <p>The sustainable marketplace for pre-loved clothing. Give fashion a second life.</p>
+        <div class="social-links">
+          <a href="#" class="social-link" aria-label="Facebook">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+          </a>
+          <a href="#" class="social-link" aria-label="Instagram">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+          </a>
+          <a href="#" class="social-link" aria-label="Twitter">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="footer-links">
+        <h3>Shop</h3>
+        <ul>
+          <li><a [routerLink]="['/new-listings']">All Items</a></li>
+          <li><a [routerLink]="['/new-listings']" [queryParams]="{sort: 'newest'}">New Arrivals</a></li>
+          <li><a [routerLink]="['/new-listings']" [queryParams]="{sort: 'price_asc'}">Budget Finds</a></li>
+          <li><a [routerLink]="['/sell']">Sell Your Items</a></li>
+        </ul>
+      </div>
+
+      <!-- Company Links -->
+      <div class="footer-links">
+        <h3>Company</h3>
+        <ul>
+          <li><a routerLink="/about">About Us</a></li>
+          <li><a routerLink="/blog">Blog</a></li>
+          <li><a routerLink="/faq">FAQs</a></li>
+          <li><a routerLink="/contact">Contact Us</a></li>
+        </ul>
+      </div>
+
+      <!-- Support Links -->
+      <div class="footer-links">
+        <h3>Support</h3>
+        <ul>
+          <li><a routerLink="/shipping-policy">Shipping Policy</a></li>
+          <li><a routerLink="/return-policy">Return Policy</a></li>
+          <li><a routerLink="/privacy-policy">Privacy Policy</a></li>
+          <li><a routerLink="/terms-of-service">Terms of Service</a></li>
+        </ul>
+      </div>
+
+      <!-- Newsletter -->
+      <div class="footer-newsletter">
+        <h3>Stay in the Loop</h3>
+        <p>Subscribe for sustainable fashion tips and exclusive deals</p>
+        <form class="newsletter-form">
+          <div class="input-group">
+            <input type="email" placeholder="youremail@example.com" required>
+            <button type="submit" aria-label="Subscribe">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="copyright">
+        <p>&copy; {{ currentYear }} Thrifto. All rights reserved.</p>
+      </div>
+      <div class="footer-bottom-links">
+        <a routerLink="/privacy-policy">Privacy</a>
+        <a routerLink="/terms-of-service">Terms</a>
+      </div>
+    </div>
+  </div>
+</footer>
+

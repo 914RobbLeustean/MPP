@@ -1,0 +1,177 @@
+<!-- src/app/components/sell/sell.component.html -->
+<div class="container">
+  <h1>Sell Your Items</h1>
+
+  <div class="notifications">
+    <div *ngIf="showSuccessNotification" class="notification success">
+      PUBLISHED SUCCESSFULLY
+    </div>
+    <div *ngIf="showFailedNotification" class="notification error">
+      PUBLISHED FAILED
+    </div>
+  </div>
+
+  <div class="listing-form-container">
+    <h2>Create New Listing</h2>
+    <div class="listing-form">
+      <div class="photos-container">
+        <h3>Photos</h3>
+        <div class="photo-grid">
+          <div class="photo-upload" *ngFor="let photo of photos; let i = index">
+            <img *ngIf="photo" [src]="photo" alt="Product photo">
+            <div *ngIf="!photo" class="upload-placeholder" (click)="triggerFileInput(i)">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="12" y1="18" x2="12" y2="12"></line>
+                <line x1="9" y1="15" x2="15" y2="15"></line>
+              </svg>
+              <span>Add Photo</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-details">
+        <form [formGroup]="listingForm" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text"
+                   id="title"
+                   formControlName="title"
+                   placeholder="e.g., Women's Jeans"
+                   class="form-control"
+                   [class.is-invalid]="listingForm.get('title')?.invalid && listingForm.get('title')?.touched">
+            <div *ngIf="listingForm.get('title')?.invalid && listingForm.get('title')?.touched" class="invalid-feedback">
+              Title is required
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="measurement">Measurement</label>
+            <input type="text"
+                   id="measurement"
+                   formControlName="measurement"
+                   placeholder="e.g., W 32UK"
+                   class="form-control"
+                   [class.is-invalid]="listingForm.get('measurement')?.invalid && listingForm.get('measurement')?.touched">
+            <div *ngIf="listingForm.get('measurement')?.invalid && listingForm.get('measurement')?.touched" class="invalid-feedback">
+              Measurement is required
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="quality">Quality</label>
+            <select id="quality"
+                    formControlName="quality"
+                    class="form-control">
+              <option value="NEW">NEW</option>
+              <option value="LIKE NEW">LIKE NEW</option>
+              <option value="BARELY WORN">BARELY WORN</option>
+              <option value="USED">USED</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description"
+                      formControlName="description"
+                      class="form-control"
+                      rows="4"
+                      maxlength="250">
+      </textarea>
+            <div class="character-counter">
+              {{ listingForm.get('description')?.value?.length || 0 }}/250 characters
+            </div>
+            <div *ngIf="listingForm.get('description')?.invalid && listingForm.get('description')?.touched" class="error-message">
+              Description is too long (maximum 250 characters).
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="price">Price ($)</label>
+            <input type="number"
+                   id="price"
+                   formControlName="price"
+                   placeholder="e.g., 27"
+                   class="form-control"
+                   [class.is-invalid]="listingForm.get('price')?.invalid && listingForm.get('price')?.touched"
+                   step="0.01"
+                   min="0.01">
+            <div *ngIf="listingForm.get('price')?.invalid && listingForm.get('price')?.touched" class="invalid-feedback">
+              <div *ngIf="listingForm.get('price')?.errors?.['required']">Price is required</div>
+              <div *ngIf="listingForm.get('price')?.errors?.['min']">Price must be greater than 0</div>
+            </div>
+          </div>
+
+          <button type="submit"
+                  class="btn btn-primary"
+                  [disabled]="listingForm.invalid || isSubmitting || !hasPhotoFiles()">
+            <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm"></span>
+            PUBLISH
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="my-listings">
+    <h2>My Listings</h2>
+
+    <div class="loading-spinner" *ngIf="isLoadingUserListings"></div>
+
+    <div class="no-listings" *ngIf="!isLoadingUserListings && userListings.length === 0">
+      <p>You haven't created any listings yet. Start selling by creating a new listing above!</p>
+    </div>
+
+    <div class="listing-statistics" *ngIf="!isLoadingUserListings && userListings.length > 0">
+      <div class="stat-item">
+        <div class="stat-color highest-color"></div>
+        <span>Highest Price: ${{ highestPrice?.toFixed(2) }}</span>
+      </div>
+      <div class="stat-item">
+        <div class="stat-color lowest-color"></div>
+        <span>Lowest Price: ${{ lowestPrice?.toFixed(2) }}</span>
+      </div>
+      <div class="stat-item">
+        <div class="stat-color average-color"></div>
+        <span>Average Price: ${{ formattedAveragePrice }}</span>
+      </div>
+    </div>
+
+    <div class="listings-grid" *ngIf="!isLoadingUserListings && userListings.length > 0">
+      <div class="user-listing-card"
+           *ngFor="let listing of userListings"
+           [ngClass]="getListingCardClass(listing.id)">
+        <div class="listing-image">
+          <img [src]="getImageUrl(listing.mainPhotoUrl)" [alt]="listing.title">
+        </div>
+        <div class="listing-details">
+          <h3>${{ listing.price }}</h3>
+          <p class="listing-title">{{ listing.title }}</p>
+          <div class="listing-meta">
+            <span class="measurement">{{ listing.measurement }}</span>
+            <span class="quality">{{ listing.quality }}</span>
+          </div>
+        </div>
+        <div class="listing-actions">
+          <button class="btn btn-edit" (click)="editListing(listing.id)">EDIT</button>
+          <button class="btn btn-delete" (click)="deleteListing(listing.id)">DELETE</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" *ngIf="showDeleteConfirmation">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <h3>Are you sure you want to delete this listing?</h3>
+        <p>This action cannot be undone.</p>
+        <div class="modal-actions">
+          <button class="btn btn-secondary" (click)="cancelDelete()">Cancel</button>
+          <button class="btn btn-danger" (click)="confirmDelete()">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

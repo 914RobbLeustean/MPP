@@ -1,0 +1,103 @@
+/* src/app/components/search/search.component.scss */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.search-header {
+  margin-bottom: 30px;
+
+  h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #333;
+  }
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  padding: 40px 0;
+
+  &:after {
+    content: '';
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #a83939;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+}
+
+.no-results, .search-prompt {
+  text-align: center;
+  padding: 60px 0;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+
+  p {
+    margin-bottom: 20px;
+    color: #666;
+    font-size: 18px;
+  }
+
+  .btn-primary {
+    background-color: #a83939;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: darken(#a83939, 10%);
+    }
+  }
+}
+
+.search-results {
+  .results-count {
+    margin-bottom: 20px;
+    padding: 10px 0;
+    color: #666;
+
+    p {
+      margin: 0;
+    }
+  }
+
+  .listings-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+
+    @media (max-width: 992px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    @media (max-width: 768px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 576px) {
+      grid-template-columns: 1fr;
+    }
+
+    .listing-card {
+      cursor: pointer;
+    }
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}

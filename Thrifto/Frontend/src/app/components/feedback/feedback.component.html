@@ -1,0 +1,98 @@
+<!-- src/app/components/feedback/feedback.component.html -->
+<div class="container">
+  <div class="loading-spinner" *ngIf="isLoadingUser"></div>
+
+  <div class="feedback-container" *ngIf="!isLoadingUser && user">
+    <div class="user-header">
+      <div class="user-avatar">
+        {{ user.username.charAt(0).toUpperCase() }}
+      </div>
+      <div class="user-info">
+        <h1>{{ user.username }}</h1>
+        <div class="user-meta">
+          <span>{{ user.firstName }} {{ user.lastName }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="feedback-form-container" *ngIf="getCurrentUserId() !== userId">
+      <h2>Leave Feedback</h2>
+
+      <form [formGroup]="feedbackForm" (ngSubmit)="submitFeedback()">
+        <div class="rating-selector">
+          <label>Rating</label>
+          <div class="star-rating">
+            <span *ngFor="let star of [1, 2, 3, 4, 5]"
+                  class="star"
+                  [class.filled]="feedbackForm.get('rating')?.value >= star"
+                  (click)="setRating(star)">
+              ★
+            </span>
+          </div>
+          <div *ngIf="feedbackForm.get('rating')?.invalid && feedbackForm.get('rating')?.touched" class="error-message">
+            Please select a rating
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="comment">Comment (optional)</label>
+          <textarea id="comment"
+                    formControlName="comment"
+                    rows="4"
+                    placeholder="Share your experience..."></textarea>
+        </div>
+
+        <button type="submit"
+                class="btn btn-primary"
+                [disabled]="feedbackForm.invalid || isSubmitting">
+          <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm"></span>
+          Submit Feedback
+        </button>
+      </form>
+    </div>
+
+    <div class="feedback-list-container">
+      <h2>
+        User Feedback
+        <span class="rating-summary" *ngIf="userFeedback.length > 0">
+          {{ calculateAverageRating() }} / 5
+          <small>({{ userFeedback.length }} review{{ userFeedback.length !== 1 ? 's' : '' }})</small>
+        </span>
+      </h2>
+
+      <div class="loading-spinner" *ngIf="isLoadingFeedback"></div>
+
+      <div class="no-feedback" *ngIf="!isLoadingFeedback && userFeedback.length === 0">
+        <p>No feedback yet</p>
+      </div>
+
+      <div class="feedback-list" *ngIf="!isLoadingFeedback && userFeedback.length > 0">
+        <div class="feedback-item" *ngFor="let feedback of userFeedback">
+          <div class="feedback-header">
+            <div class="star-rating">
+              <span *ngFor="let star of [1, 2, 3, 4, 5]"
+                    class="star"
+                    [class.filled]="star <= feedback.rating">
+                ★
+              </span>
+            </div>
+            <span class="date">{{ feedback.createdAt | date }}</span>
+          </div>
+          <div class="reviewer">
+            <div class="reviewer-avatar">
+              {{ feedback.reviewerUsername.charAt(0).toUpperCase() }}
+            </div>
+            <span>{{ feedback.reviewerUsername }}</span>
+          </div>
+          <div class="comment" *ngIf="feedback.comment">{{ feedback.comment }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="not-found" *ngIf="!isLoadingUser && !user">
+    <h2>User Not Found</h2>
+    <p>The user you're looking for doesn't exist or has been deactivated.</p>
+    <a routerLink="/" class="btn btn-primary">Back to Home</a>
+  </div>
+</div>
