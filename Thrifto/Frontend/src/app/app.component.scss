@@ -1,0 +1,23 @@
+/* src/app/app.component.scss */
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+main {
+  min-height: calc(100vh - 60px - 200px);
+  // Adjust based on header and footer heights
+  position: relative;
+}
+
+app-footer {
+  flex-shrink: 0;
+  position: relative;
+  z-index: 0;
+  width: 100%;
+  background-color: #1e293b;
+  margin-bottom: -1px; /* This helps eliminate any potential gap */
+}
