@@ -1,0 +1,57 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\leust\\source\\repos\\MPP-main\\Thrifto\\Thrifto.Server\\wwwroot\\assets\\images\\generated\\.txt",
+      "PackagePath": "staticwebassets\\assets\\images\\generated\\.txt"
+    },
+    {
+      "Id": "C:\\Users\\leust\\source\\repos\\MPP-main\\Thrifto\\Thrifto.Server\\wwwroot\\assets\\images\\generated\\item1.jpg",
+      "PackagePath": "staticwebassets\\assets\\images\\generated\\item1.jpg"
+    },
+    {
+      "Id": "C:\\Users\\leust\\source\\repos\\MPP-main\\Thrifto\\Thrifto.Server\\wwwroot\\assets\\images\\generated\\item2.jpg",
+      "PackagePath": "staticwebassets\\assets\\images\\generated\\item2.jpg"
+    },
+    {
+      "Id": "C:\\Users\\leust\\source\\repos\\MPP-main\\Thrifto\\Thrifto.Server\\wwwroot\\assets\\images\\generated\\item3.jpg",
+      "PackagePath": "staticwebassets\\assets\\images\\generated\\item3.jpg"
+    },
+    {
+      "Id": "C:\\Users\\leust\\source\\repos\\MPP-main\\Thrifto\\Thrifto.Server\\wwwroot\\assets\\images\\generated\\item4.jpg",
+      "PackagePath": "staticwebassets\\assets\\images\\generated\\item4.jpg"
+    },
+    {
+      "Id": "C:\\Users\\leust\\source\\repos\\MPP-main\\Thrifto\\Thrifto.Server\\wwwroot\\assets\\images\\generated\\item5.jpg",
+      "PackagePath": "staticwebassets\\assets\\images\\generated\\item5.jpg"
+    },
+    {
+      "Id": "C:\\Users\\leust\\source\\repos\\MPP-main\\Thrifto\\Thrifto.Server\\wwwroot\\assets\\images\\generated\\item6.jpg",
+      "PackagePath": "staticwebassets\\assets\\images\\generated\\item6.jpg"
+    },
+    {
+      "Id": "C:\\Users\\leust\\source\\repos\\MPP-main\\Thrifto\\Thrifto.Server\\wwwroot\\uploads\\4ebda02f-faac-446f-9adb-6cb992fc0b40.png",
+      "PackagePath": "staticwebassets\\uploads\\4ebda02f-faac-446f-9adb-6cb992fc0b40.png"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.Thrifto.Server.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.Thrifto.Server.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.build.Thrifto.Server.props",
+      "PackagePath": "build\\Thrifto.Server.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.buildMultiTargeting.Thrifto.Server.props",
+      "PackagePath": "buildMultiTargeting\\Thrifto.Server.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.buildTransitive.Thrifto.Server.props",
+      "PackagePath": "buildTransitive\\Thrifto.Server.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

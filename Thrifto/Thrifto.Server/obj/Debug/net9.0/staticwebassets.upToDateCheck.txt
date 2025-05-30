@@ -1,0 +1,9 @@
+C:\Users\leust\source\repos\MPP-main\Thrifto\Thrifto.Server\wwwroot\assets\images\generated\.txt
+wwwroot\assets\images\generated\.txt
+wwwroot\assets\images\generated\item1.jpg
+wwwroot\assets\images\generated\item2.jpg
+wwwroot\assets\images\generated\item3.jpg
+wwwroot\assets\images\generated\item4.jpg
+wwwroot\assets\images\generated\item5.jpg
+wwwroot\assets\images\generated\item6.jpg
+wwwroot\uploads\4ebda02f-faac-446f-9adb-6cb992fc0b40.png
