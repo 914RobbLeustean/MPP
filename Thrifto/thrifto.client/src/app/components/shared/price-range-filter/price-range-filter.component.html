@@ -1,0 +1,96 @@
+<!-- src/app/components/shared/price-range-filter/price-range-filter.component.html -->
+<div class="price-filter-container" [class]="themeClass">
+    <div class="filter-header">
+        <div class="filter-icon">
+            <i class="fas fa-dollar-sign"></i>
+        </div>
+        <h3>Price Range</h3>
+        <button class="reset-button"
+                *ngIf="hasActiveFilter"
+                (click)="resetFilter()"
+                aria-label="Reset price filter">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <div class="price-inputs-row">
+        <div class="price-input-group">
+            <label for="minPrice">Min</label>
+            <div class="input-wrapper">
+                <span class="currency-symbol">$</span>
+                <input type="number"
+                       id="minPrice"
+                       [(ngModel)]="minPrice"
+                       (input)="onMinPriceChange()"
+                       (blur)="validateAndEmit()"
+                       [min]="absoluteMin"
+                       [max]="maxPrice"
+                       class="price-input"
+                       placeholder="0">
+            </div>
+        </div>
+
+        <div class="range-separator">
+            <span>to</span>
+        </div>
+
+        <div class="price-input-group">
+            <label for="maxPrice">Max</label>
+            <div class="input-wrapper">
+                <span class="currency-symbol">$</span>
+                <input type="number"
+                       id="maxPrice"
+                       [(ngModel)]="maxPrice"
+                       (input)="onMaxPriceChange()"
+                       (blur)="validateAndEmit()"
+                       [min]="minPrice"
+                       [max]="absoluteMax"
+                       class="price-input"
+                       placeholder="1000">
+            </div>
+        </div>
+    </div>
+
+    <div class="slider-container">
+        <div class="slider-track">
+            <div class="slider-range"
+                 [style.left.%]="getSliderPosition(minPrice)"
+                 [style.width.%]="getSliderWidth()"></div>
+        </div>
+
+        <input type="range"
+               class="slider slider-min"
+               [min]="absoluteMin"
+               [max]="absoluteMax"
+               [value]="minPrice"
+               (input)="onMinSliderChange($event)"
+               [style.z-index]="minPrice > absoluteMax - 100 ? 2 : 1">
+
+        <input type="range"
+               class="slider slider-max"
+               [min]="absoluteMin"
+               [max]="absoluteMax"
+               [value]="maxPrice"
+               (input)="onMaxSliderChange($event)">
+    </div>
+
+    <div class="price-presets" *ngIf="showPresets">
+        <div class="presets-label">Quick Filters:</div>
+        <div class="preset-buttons">
+            <button class="preset-btn"
+                    *ngFor="let preset of pricePresets"
+                    (click)="applyPreset(preset)"
+                    [class.active]="isPresetActive(preset)">
+                <span class="preset-label">{{ preset.label }}</span>
+                <span class="preset-range">${{ preset.min }}-${{ preset.max }}</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="filter-summary" *ngIf="hasActiveFilter">
+        <div class="summary-text">
+            <i class="fas fa-filter"></i>
+            <span>{{ getFilterSummary() }}</span>
+        </div>
+    </div>
+</div>

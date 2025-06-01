@@ -1,0 +1,39 @@
+/* src/styles.scss */
+
+// Reset styles
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    height: 100%;
+    scroll-behavior: auto !important; /* Force immediate scroll */
+}
+
+// Remove any default margins/padding from Angular components
+app-root {
+    display: block;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+}
+
+// Prevent any global container styles from affecting footer
+.container:not(.footer .container) {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+// Force scroll position reset
+body, html, app-root {
+    scroll-behavior: auto !important;
+}

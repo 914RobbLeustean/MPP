@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Thrifto.Server")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9680c22bdbc223ad4a3783e5015820147dc41c34")]
 [assembly: System.Reflection.AssemblyProductAttribute("Thrifto.Server")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Thrifto.Server")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

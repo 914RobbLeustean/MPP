@@ -1,0 +1,144 @@
+<!-- src/app/components/policy/blog/blog.component.html -->
+<div class="blog-container">
+    <!-- Hero Section -->
+    <section class="blog-hero">
+        <div class="hero-background"></div>
+        <div class="container">
+            <div class="hero-content">
+                <h1>Thrifto Blog</h1>
+                <p>Discover sustainable fashion tips, thrifting guides, and eco-friendly lifestyle content</p>
+                <div class="hero-tags">
+                    <span class="tag" *ngFor="let tag of popularTags">{{ tag }}</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Content -->
+    <section class="blog-content">
+        <div class="container">
+            <div class="blog-layout">
+                <!-- Main Content -->
+                <div class="blog-main">
+                    <div class="content-header">
+                        <div class="filter-tabs">
+                            <button *ngFor="let category of categories"
+                                    class="filter-tab"
+                                    [class.active]="selectedCategory === category.id"
+                                    (click)="selectCategory(category.id)">
+                                {{ category.name }}
+                            </button>
+                        </div>
+                        <div class="view-toggle">
+                            <button class="view-btn"
+                                    [class.active]="viewMode === 'grid'"
+                                    (click)="viewMode = 'grid'">
+                                <i class="fas fa-th"></i>
+                            </button>
+                            <button class="view-btn"
+                                    [class.active]="viewMode === 'list'"
+                                    (click)="viewMode = 'list'">
+                                <i class="fas fa-list"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="blog-posts" [class]="viewMode + '-view'">
+                        <article class="blog-post"
+                                 *ngFor="let post of filteredPosts"
+                                 [class.featured]="post.featured">
+                            <div class="post-image">
+                                <img [src]="post.image" [alt]="post.title">
+                                <div class="post-overlay">
+                                    <span class="post-category">{{ post.category }}</span>
+                                    <span *ngIf="post.featured" class="featured-badge">Featured</span>
+                                </div>
+                            </div>
+                            <div class="post-content">
+                                <div class="post-meta">
+                                    <span class="post-date">
+                                        <i class="fas fa-calendar"></i>
+                                        {{ post.date | date:'MMM d, y' }}
+                                    </span>
+                                    <span class="read-time">
+                                        <i class="fas fa-clock"></i>
+                                        {{ post.readTime }} min read
+                                    </span>
+                                </div>
+                                <h2>{{ post.title }}</h2>
+                                <p>{{ post.excerpt }}</p>
+                                <div class="post-footer">
+                                    <div class="post-tags">
+                                        <span class="tag" *ngFor="let tag of post.tags.slice(0, 2)">{{ tag }}</span>
+                                    </div>
+                                    <button class="read-more-btn">
+                                        <span>Read More</span>
+                                        <i class="fas fa-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+
+                    <div *ngIf="filteredPosts.length === 0" class="no-posts">
+                        <div class="no-posts-icon">
+                            <i class="fas fa-newspaper"></i>
+                        </div>
+                        <h3>No posts found</h3>
+                        <p>Try selecting a different category or check back later for new content.</p>
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="blog-sidebar">
+                    <div class="sidebar-widget search-widget">
+                        <h3>Search Posts</h3>
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text"
+                                   placeholder="Search articles..."
+                                   [(ngModel)]="searchTerm"
+                                   (input)="filterPosts()">
+                        </div>
+                    </div>
+
+                    <div class="sidebar-widget popular-widget">
+                        <h3>Popular Posts</h3>
+                        <div class="popular-posts">
+                            <div class="popular-post" *ngFor="let post of popularPosts">
+                                <div class="popular-image">
+                                    <img [src]="post.image" [alt]="post.title">
+                                </div>
+                                <div class="popular-content">
+                                    <h4>{{ post.title }}</h4>
+                                    <span class="popular-date">{{ post.date | date:'MMM d' }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-widget newsletter-widget">
+                        <div class="newsletter-content">
+                            <div class="newsletter-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <h3>Stay Updated</h3>
+                            <p>Get the latest sustainable fashion tips and thrifting guides delivered to your inbox.</p>
+                            <form class="newsletter-form">
+                                <input type="email" placeholder="Enter your email">
+                                <button type="submit" class="subscribe-btn">Subscribe</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-widget tags-widget">
+                        <h3>Popular Tags</h3>
+                        <div class="tag-cloud">
+                            <span class="tag" *ngFor="let tag of allTags">{{ tag }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

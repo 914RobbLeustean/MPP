@@ -1,0 +1,263 @@
+<!-- src/app/components/cart/cart.component.html -->
+<div class="cart-container">
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-background"></div>
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-icon">
+                    <i class="fas fa-shopping-cart" aria-hidden="true"></i>
+                </div>
+                <h1>Shopping Cart</h1>
+                <p>Review your selected items and proceed to checkout when you're ready.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="content-section">
+        <div class="container">
+            <!-- Empty Cart State -->
+            <div *ngIf="cartItems.length === 0" class="empty-cart">
+                <div class="empty-icon">
+                    <i class="fas fa-shopping-cart" aria-hidden="true"></i>
+                </div>
+                <h2>Your cart is empty</h2>
+                <p>Discover amazing pre-loved fashion items and start building your sustainable wardrobe!</p>
+                <div class="empty-actions">
+                    <button class="btn btn-primary" (click)="continueShopping()">
+                        <i class="fas fa-store" aria-hidden="true"></i>
+                        Start Shopping
+                    </button>
+                    <button class="btn btn-outline" (click)="viewRecommendations()">
+                        <i class="fas fa-heart" aria-hidden="true"></i>
+                        View Recommendations
+                    </button>
+                </div>
+            </div>
+
+            <!-- Cart with Items -->
+            <div *ngIf="cartItems.length > 0" class="cart-content">
+                <!-- Cart Header -->
+                <div class="cart-header">
+                    <div class="cart-title">
+                        <h2>
+                            <i class="fas fa-shopping-bag" aria-hidden="true"></i>
+                            Your Items ({{ cartItems.length }})
+                        </h2>
+                        <p>{{ cartItems.length }} {{ cartItems.length === 1 ? 'item' : 'items' }} ready for checkout</p>
+                    </div>
+                    <button class="btn btn-outline btn-sm" (click)="clearCart()" *ngIf="cartItems.length > 1">
+                        <i class="fas fa-trash" aria-hidden="true"></i>
+                        Clear Cart
+                    </button>
+                </div>
+
+                <div class="cart-layout">
+                    <!-- Cart Items -->
+                    <div class="cart-items">
+                        <div class="cart-item" *ngFor="let item of cartItems; trackBy: trackByItemId">
+                            <div class="item-image">
+                                <img [src]="getImageUrl(item.listing.mainPhotoUrl)"
+                                     [alt]="item.listing.title"
+                                     loading="lazy">
+                                <div class="item-badge">
+                                    <i class="fas fa-leaf" aria-hidden="true"></i>
+                                    Pre-loved
+                                </div>
+                            </div>
+
+                            <div class="item-details">
+                                <div class="item-header">
+                                    <h3 class="item-title">{{ item.listing.title }}</h3>
+                                    <button class="remove-item"
+                                            (click)="removeItem(item.listing.id)"
+                                            title="Remove item">
+                                        <i class="fas fa-times" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+
+                                <div class="item-meta">
+                                    <div class="meta-item">
+                                        <i class="fas fa-ruler" aria-hidden="true"></i>
+                                        <span>{{ item.listing.measurement }}</span>
+                                    </div>
+                                    <div class="meta-item">
+                                        <i class="fas fa-star" aria-hidden="true"></i>
+                                        <span>{{ item.listing.quality }}</span>
+                                    </div>
+                                    <div class="meta-item">
+                                        <i class="fas fa-user" aria-hidden="true"></i>
+                                        <span>Seller: {{ getSellerName(item.listing) }}</span>
+                                    </div>
+                                </div>
+
+                                <div class="item-actions">
+                                    <button class="btn btn-outline btn-sm" (click)="viewItemDetails(item.listing.id)">
+                                        <i class="fas fa-eye" aria-hidden="true"></i>
+                                        View Details
+                                    </button>
+                                    <button class="btn btn-outline btn-sm" (click)="saveForLater(item.listing.id)">
+                                        <i class="fas fa-heart" aria-hidden="true"></i>
+                                        Save for Later
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="item-price">
+                                <div class="price-current">${{ item.listing.price.toFixed(2) }}</div>
+                                <div class="price-sustainability">
+                                    <i class="fas fa-recycle" aria-hidden="true"></i>
+                                    <span>Saving {{ calculateSavings(item.listing.price) }}% vs new</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Order Summary -->
+                    <div class="order-summary">
+                        <div class="summary-card">
+                            <h3>
+                                <i class="fas fa-receipt" aria-hidden="true"></i>
+                                Order Summary
+                            </h3>
+
+                            <div class="summary-breakdown">
+                                <div class="summary-row">
+                                    <span>Subtotal ({{ cartItems.length }} items)</span>
+                                    <span>${{ calculateSubtotal().toFixed(2) }}</span>
+                                </div>
+
+                                <div class="summary-row">
+                                    <span>Shipping</span>
+                                    <span class="shipping-info">
+                                        {{ calculateShipping() === 0 ? 'FREE' : '$' + calculateShipping().toFixed(2) }}
+                                        <small *ngIf="calculateShipping() === 0">🎉 Free shipping!</small>
+                                    </span>
+                                </div>
+
+                                <div class="summary-row savings">
+                                    <span>
+                                        <i class="fas fa-leaf" aria-hidden="true"></i>
+                                        Estimated Savings
+                                    </span>
+                                    <span class="savings-amount">-${{ calculateTotalSavings().toFixed(2) }}</span>
+                                </div>
+
+                                <div class="summary-divider"></div>
+
+                                <div class="summary-row total">
+                                    <span>Total</span>
+                                    <span>${{ calculateTotal().toFixed(2) }}</span>
+                                </div>
+                            </div>
+
+                            <div class="sustainability-impact">
+                                <div class="impact-header">
+                                    <i class="fas fa-globe" aria-hidden="true"></i>
+                                    <span>Your Environmental Impact</span>
+                                </div>
+                                <div class="impact-stats">
+                                    <div class="impact-item">
+                                        <span class="impact-number">{{ cartItems.length }}</span>
+                                        <span class="impact-label">Items saved from waste</span>
+                                    </div>
+                                    <div class="impact-item">
+                                        <span class="impact-number">~{{ calculateWaterSaved() }}L</span>
+                                        <span class="impact-label">Water saved</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="checkout-actions">
+                                <button class="btn btn-primary checkout-btn" (click)="proceedToCheckout()">
+                                    <i class="fas fa-lock" aria-hidden="true"></i>
+                                    Secure Checkout
+                                </button>
+
+                                <div class="payment-methods">
+                                    <span>We accept:</span>
+                                    <div class="payment-icons">
+                                        <i class="fab fa-cc-visa" aria-hidden="true"></i>
+                                        <i class="fab fa-cc-mastercard" aria-hidden="true"></i>
+                                        <i class="fab fa-cc-paypal" aria-hidden="true"></i>
+                                        <i class="fab fa-apple-pay" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+
+                                <button class="btn btn-outline continue-btn" (click)="continueShopping()">
+                                    <i class="fas fa-arrow-left" aria-hidden="true"></i>
+                                    Continue Shopping
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Trust Badges -->
+                        <div class="trust-badges">
+                            <div class="trust-item">
+                                <i class="fas fa-shield-alt" aria-hidden="true"></i> <span>Secure Payment</span>
+                            </div>
+                            <div class="trust-item">
+                                <i class="fas fa-undo" aria-hidden="true"></i>
+                                <span>Easy Returns</span>
+                            </div>
+                            <div class="trust-item">
+                                <i class="fas fa-shipping-fast" aria-hidden="true"></i>
+                                <span>Fast Delivery</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recommendations -->
+                <div class="recommendations-section">
+                    <h3>
+                        <i class="fas fa-sparkles" aria-hidden="true"></i>
+                        You might also like
+                    </h3>
+                    <p>Similar items from our sustainable collection</p>
+                    <div class="recommendations-grid">
+                        <!-- This would be populated with actual recommendations -->
+                        <div class="recommendation-card" *ngFor="let item of [1,2,3]">
+                            <div class="rec-image">
+                                <img src="assets/images/placeholder.png" alt="Recommended item">
+                            </div>
+                            <div class="rec-content">
+                                <h4>Similar Item {{ item }}</h4>
+                                <span class="rec-price">$25.99</span>
+                            </div>
+                            <button class="btn btn-outline btn-sm">
+                                <i class="fas fa-plus" aria-hidden="true"></i>
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Clear Cart Confirmation Modal -->
+    <div *ngIf="showClearConfirmation" class="modal-overlay" (click)="$event.target === $event.currentTarget && cancelClearCart()">
+        <div class="clear-modal">
+            <div class="modal-header">
+                <div class="modal-icon">
+                    <i class="fas fa-trash" aria-hidden="true"></i>
+                </div>
+                <h3>Clear Cart</h3>
+                <p>Are you sure you want to remove all items from your cart?</p>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn btn-secondary" (click)="cancelClearCart()">
+                    <i class="fas fa-times" aria-hidden="true"></i>
+                    Cancel
+                </button>
+                <button class="btn btn-danger" (click)="confirmClearCart()">
+                    <i class="fas fa-trash" aria-hidden="true"></i>
+                    Clear Cart
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

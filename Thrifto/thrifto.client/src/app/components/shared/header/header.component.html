@@ -1,0 +1,184 @@
+<!-- src/app/components/shared/header/header.component.html -->
+<nav class="navbar">
+    <div class="navbar-background"></div>
+
+    <div class="navbar-content">
+        <!-- Brand -->
+        <div class="brand">
+            <a routerLink="/" class="brand-link">
+                <div class="brand-icon">
+                    <i class="fas fa-leaf"></i>
+                </div>
+                <span class="brand-text">THRIFTO</span>
+            </a>
+        </div>
+
+        <!-- Navigation Links -->
+        <div class="nav-links">
+            <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link">
+                <i class="fas fa-home"></i>
+                <span>HOME</span>
+            </a>
+            <a routerLink="/new-listings" routerLinkActive="active" class="nav-link">
+                <i class="fas fa-store"></i>
+                <span>SHOP</span>
+            </a>
+            <a routerLink="/sell" routerLinkActive="active" *ngIf="(currentUser$ | async)" class="nav-link">
+                <i class="fas fa-tag"></i>
+                <span>SELL</span>
+            </a>
+            <a routerLink="/cart" routerLinkActive="active" class="nav-link cart-link">
+                <i class="fas fa-shopping-cart"></i>
+                <span>CART</span>
+                <span class="cart-badge" *ngIf="cartItemCount > 0">{{ cartItemCount }}</span>
+            </a>
+        </div>
+
+        <!-- User Menu -->
+        <div class="user-menu">
+            <ng-container *ngIf="(currentUser$ | async) as user; else loggedOut">
+                <div class="user-dropdown" (click)="toggleDropdown()" [class.open]="isDropdownOpen">
+                    <div class="user-info">
+                        <div class="user-avatar">{{ user.firstName.charAt(0) }}{{ user.lastName.charAt(0) }}</div>
+                        <div class="user-details">
+                            <span class="username">{{ user.firstName }}</span>
+                            <span class="user-role">Member</span>
+                        </div>
+                        <i class="fas fa-chevron-down dropdown-arrow" [class.rotated]="isDropdownOpen"></i>
+                    </div>
+
+                    <div class="dropdown-menu" *ngIf="isDropdownOpen">
+                        <div class="dropdown-header">
+                            <div class="user-avatar-large">{{ user.firstName.charAt(0) }}{{ user.lastName.charAt(0) }}</div>
+                            <div class="user-info-detailed">
+                                <div class="user-name">{{ user.firstName }} {{ user.lastName }}</div>
+                                <div class="user-email">{{ user.email }}</div>
+                                <div class="user-status">
+                                    <i class="fas fa-circle"></i>
+                                    <span>Online</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dropdown-divider"></div>
+
+                        <a routerLink="/dashboard" (click)="closeDropdown()" class="dropdown-item">
+                            <div class="item-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="item-content">
+                                <span class="item-title">Dashboard</span>
+                                <span class="item-description">View your listings and activity</span>
+                            </div>
+                        </a>
+
+                        <a routerLink="/account-settings" (click)="closeDropdown()" class="dropdown-item">
+                            <div class="item-icon">
+                                <i class="fas fa-user-cog"></i>
+                            </div>
+                            <div class="item-content">
+                                <span class="item-title">Account Settings</span>
+                                <span class="item-description">Manage your profile and preferences</span>
+                            </div>
+                        </a>
+
+                        <!-- ADD: Security navigation items -->
+                        <a routerLink="/security-center" (click)="closeDropdown()" class="dropdown-item">
+                            <div class="item-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <div class="item-content">
+                                <span class="item-title">Security Center</span>
+                                <span class="item-description">Manage your account security</span>
+                            </div>
+                        </a>
+
+                        <div class="dropdown-divider"></div>
+
+                        <button (click)="logout()" class="dropdown-item logout-item">
+                            <div class="item-icon">
+                                <i class="fas fa-sign-out-alt"></i>
+                            </div>
+                            <div class="item-content">
+                                <span class="item-title">Sign Out</span>
+                                <span class="item-description">Log out of your account</span>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </ng-container>
+
+            <ng-template #loggedOut>
+                <div class="auth-buttons">
+                    <a routerLink="/login" class="btn-auth btn-login">
+                        <i class="fas fa-sign-in-alt"></i>
+                        <span>Login</span>
+                    </a>
+                    <a routerLink="/register" class="btn-auth btn-register">
+                        <i class="fas fa-user-plus"></i>
+                        <span>Register</span>
+                    </a>
+                </div>
+            </ng-template>
+        </div>
+
+        <!-- Mobile Menu Toggle -->
+        <div class="mobile-menu-toggle" (click)="toggleMobileMenu()">
+            <div class="hamburger" [class.active]="isMobileMenuOpen">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" [class.open]="isMobileMenuOpen">
+        <div class="mobile-nav-links">
+            <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="mobile-nav-link" (click)="closeMobileMenu()">
+                <i class="fas fa-home"></i>
+                <span>HOME</span>
+            </a>
+            <a routerLink="/new-listings" routerLinkActive="active" class="mobile-nav-link" (click)="closeMobileMenu()">
+                <i class="fas fa-store"></i>
+                <span>SHOP</span>
+            </a>
+            <a routerLink="/sell" routerLinkActive="active" *ngIf="(currentUser$ | async)" class="mobile-nav-link" (click)="closeMobileMenu()">
+                <i class="fas fa-tag"></i>
+                <span>SELL</span>
+            </a>
+            <a routerLink="/cart" routerLinkActive="active" class="mobile-nav-link" (click)="closeMobileMenu()">
+                <i class="fas fa-shopping-cart"></i>
+                <span>CART</span>
+                <span class="cart-badge" *ngIf="cartItemCount > 0">{{ cartItemCount }}</span>
+            </a>
+
+            <!-- ADD: Mobile security navigation (for logged in users) -->
+            <ng-container *ngIf="(currentUser$ | async)">
+                <a routerLink="/dashboard" routerLinkActive="active" class="mobile-nav-link" (click)="closeMobileMenu()">
+                    <i class="fas fa-chart-line"></i>
+                    <span>DASHBOARD</span>
+                </a>
+                <a routerLink="/account-settings" routerLinkActive="active" class="mobile-nav-link" (click)="closeMobileMenu()">
+                    <i class="fas fa-user-cog"></i>
+                    <span>SETTINGS</span>
+                </a>
+                <a routerLink="/security-center" routerLinkActive="active" class="mobile-nav-link" (click)="closeMobileMenu()">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>SECURITY</span>
+                </a>
+            </ng-container>
+        </div>
+
+        <div class="mobile-user-section" *ngIf="!(currentUser$ | async)">
+            <a routerLink="/login" class="mobile-auth-btn" (click)="closeMobileMenu()">
+                <i class="fas fa-sign-in-alt"></i>
+                <span>Login</span>
+            </a>
+            <a routerLink="/register" class="mobile-auth-btn" (click)="closeMobileMenu()">
+                <i class="fas fa-user-plus"></i>
+                <span>Register</span>
+            </a>
+        </div>
+    </div>
+</nav>

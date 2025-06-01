@@ -1,0 +1,87 @@
+<!-- src/app/components/auth/login/login.component.html -->
+<div class="auth-container">
+    <div class="auth-card">
+        <h2>{{ showTwoFactorForm ? 'Two-Factor Authentication' : 'Login to Thrifto' }}</h2>
+
+        <!-- Regular Login Form -->
+        <form *ngIf="!showTwoFactorForm" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email"
+                       id="email"
+                       formControlName="email"
+                       class="form-control"
+                       [ngClass]="{ 'is-invalid': f['email'].touched && f['email'].errors }"
+                       placeholder="your@email.com">
+                <div *ngIf="f['email'].touched && f['email'].errors" class="invalid-feedback">
+                    <div *ngIf="f['email'].errors['required']">Email is required</div>
+                    <div *ngIf="f['email'].errors['email']">Please enter a valid email</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password"
+                       id="password"
+                       formControlName="password"
+                       class="form-control"
+                       [ngClass]="{ 'is-invalid': f['password'].touched && f['password'].errors }"
+                       placeholder="Enter your password">
+                <div *ngIf="f['password'].touched && f['password'].errors" class="invalid-feedback">
+                    <div *ngIf="f['password'].errors['required']">Password is required</div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" [disabled]="loginForm.invalid || isSubmitting">
+                <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm mr-1"></span>
+                Login
+            </button>
+        </form>
+
+        <!-- Two-Factor Authentication Form -->
+        <form *ngIf="showTwoFactorForm" [formGroup]="twoFactorForm" (ngSubmit)="onTwoFactorSubmit()">
+            <div class="form-group">
+                <label for="code">
+                    {{ tf['useRecoveryCode'].value ? 'Recovery Code' : 'Authentication Code' }}
+                </label>
+                <input type="text"
+                       id="code"
+                       formControlName="code"
+                       class="form-control"
+                       [ngClass]="{ 'is-invalid': tf['code'].touched && tf['code'].errors }"
+                       [placeholder]="tf['useRecoveryCode'].value ? 'Enter recovery code' : 'Enter 6-digit code'">
+                <div *ngIf="tf['code'].touched && tf['code'].errors" class="invalid-feedback">
+                    <div *ngIf="tf['code'].errors['required']">Code is required</div>
+                    <div *ngIf="tf['code'].errors['pattern']">Please enter a valid 6-digit code</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="form-check">
+                    <input type="checkbox"
+                           id="useRecoveryCode"
+                           formControlName="useRecoveryCode"
+                           class="form-check-input"
+                           (change)="toggleRecoveryCode()">
+                    <label class="form-check-label" for="useRecoveryCode">
+                        Use recovery code instead
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-buttons">
+                <button type="button" class="btn btn-secondary" (click)="backToLogin()">
+                    Back
+                </button>
+                <button type="submit" class="btn btn-primary" [disabled]="twoFactorForm.invalid || isSubmitting">
+                    <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm mr-1"></span>
+                    Verify
+                </button>
+            </div>
+        </form>
+
+        <div class="auth-footer" *ngIf="!showTwoFactorForm">
+            <p>Don't have an account? <a routerLink="/register">Register here</a></p>
+        </div>
+    </div>
+</div>

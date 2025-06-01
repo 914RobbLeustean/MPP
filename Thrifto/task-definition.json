@@ -1,0 +1,81 @@
+{
+    "family": "thrifto-task",
+    "networkMode": "awsvpc",
+    "requiresCompatibilities": [ "FARGATE" ],
+    "cpu": "1024",
+    "memory": "2048",
+    "executionRoleArn": "arn:aws:iam::330042664746:role/thrifto-ecsTaskExecutionRole",
+    "taskRoleArn": "arn:aws:iam::330042664746:role/thrifto-ecsTaskRole",
+    "containerDefinitions": [
+        {
+            "name": "thrifto-backend",
+            "image": "330042664746.dkr.ecr.us-east-1.amazonaws.com/thrifto-backend:latest",
+            "portMappings": [
+                {
+                    "containerPort": 8080,
+                    "protocol": "tcp"
+                }
+            ],
+            "environment": [
+                {
+                    "name": "ASPNETCORE_ENVIRONMENT",
+                    "value": "Production"
+                },
+                {
+                    "name": "AWS__Region",
+                    "value": "us-east-1"
+                }
+            ],
+            "secrets": [
+                {
+                    "name": "ConnectionStrings__DefaultConnection",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-1:330042664746:secret:thrifto/database-connection-string-4eaer0"
+                },
+                {
+                    "name": "TokenKey",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-1:330042664746:secret:thrifto/jwt-qP7BIC"
+                },
+                {
+                    "name": "AWS__S3__BucketName",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-1:330042664746:secret:thrifto/s3bucket-WqcH6j"
+                }
+            ],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "/ecs/thrifto-backend",
+                    "awslogs-region": "us-east-1",
+                    "awslogs-stream-prefix": "ecs",
+                    "awslogs-create-group": "true"
+                }
+            },
+            "essential": true
+        },
+        {
+            "name": "thrifto-frontend",
+            "image": "330042664746.dkr.ecr.us-east-1.amazonaws.com/thrifto-frontend:latest",
+            "portMappings": [
+                {
+                    "containerPort": 80,
+                    "protocol": "tcp"
+                }
+            ],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "/ecs/thrifto-frontend",
+                    "awslogs-region": "us-east-1",
+                    "awslogs-stream-prefix": "ecs",
+                    "awslogs-create-group": "true"
+                }
+            },
+            "essential": true,
+            "dependsOn": [
+                {
+                    "containerName": "thrifto-backend",
+                    "condition": "START"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,317 @@
+<!-- src/app/components/sell/sell.component.html -->
+<div class="sell-container">
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-background"></div>
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-icon">
+                    <i class="fas fa-tag" aria-hidden="true"></i>
+                </div>
+                <h1>Sell Your Items</h1>
+                <p>Give your pre-loved clothes a second life and earn money while contributing to sustainable fashion.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="content-section">
+        <div class="container">
+            <!-- Create Listing Card -->
+            <div class="create-listing-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-plus" aria-hidden="true"></i>
+                    </div>
+                    <div class="card-title">
+                        <h2>Create New Listing</h2>
+                        <p>Upload photos and add details to sell your item</p>
+                    </div>
+                </div>
+
+                <form [formGroup]="listingForm" (ngSubmit)="onSubmit()" class="listing-form">
+                    <!-- Photo Upload Section -->
+                    <div class="photos-section">
+                        <h3>
+                            <i class="fas fa-camera" aria-hidden="true"></i>
+                            Photos (Required)
+                        </h3>
+                        <p class="section-description">Add up to 4 high-quality photos of your item</p>
+
+                        <div class="photos-grid">
+                            <div class="photo-upload-slot"
+                                 *ngFor="let photo of photos; let i = index"
+                                 [class.has-photo]="photo"
+                                 (click)="triggerFileInput(i)">
+
+                                <div class="photo-preview" *ngIf="photo">
+                                    <img [src]="photo" [alt]="'Product photo ' + (i + 1)">
+                                    <div class="photo-overlay">
+                                        <i class="fas fa-edit" aria-hidden="true"></i>
+                                        <span>Change Photo</span>
+                                    </div>
+                                    <button type="button" class="remove-photo" (click)="removePhoto(i); $event.stopPropagation()">
+                                        <i class="fas fa-times" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+
+                                <div class="upload-placeholder" *ngIf="!photo">
+                                    <div class="upload-icon">
+                                        <i class="fas fa-cloud-upload-alt" aria-hidden="true"></i>
+                                    </div>
+                                    <span class="upload-text">{{ i === 0 ? 'Main Photo' : 'Add Photo' }}</span>
+                                    <span class="upload-hint">{{ i === 0 ? 'Required' : 'Optional' }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form Fields -->
+                    <div class="form-fields">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="title">
+                                    <i class="fas fa-text-height" aria-hidden="true"></i>
+                                    Item Title *
+                                </label>
+                                <input type="text"
+                                       id="title"
+                                       formControlName="title"
+                                       placeholder="e.g., Women's Vintage Denim Jacket"
+                                       class="form-control"
+                                       [class.is-invalid]="listingForm.get('title')?.invalid && listingForm.get('title')?.touched">
+                                <div *ngIf="listingForm.get('title')?.invalid && listingForm.get('title')?.touched" class="error-message">
+                                    <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
+                                    Title is required
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="price">
+                                    <i class="fas fa-dollar-sign" aria-hidden="true"></i>
+                                    Price (USD) *
+                                </label>
+                                <div class="price-input-container">
+                                    <span class="price-symbol">$</span>
+                                    <input type="number"
+                                           id="price"
+                                           formControlName="price"
+                                           placeholder="27.99"
+                                           class="form-control price-input"
+                                           [class.is-invalid]="listingForm.get('price')?.invalid && listingForm.get('price')?.touched"
+                                           step="0.01"
+                                           min="0.01">
+                                </div>
+                                <div *ngIf="listingForm.get('price')?.invalid && listingForm.get('price')?.touched" class="error-message">
+                                    <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
+                                    <span *ngIf="listingForm.get('price')?.errors?.['required']">Price is required</span>
+                                    <span *ngIf="listingForm.get('price')?.errors?.['min']">Price must be greater than $0</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="measurement">
+                                    <i class="fas fa-ruler" aria-hidden="true"></i>
+                                    Size/Measurement *
+                                </label>
+                                <input type="text"
+                                       id="measurement"
+                                       formControlName="measurement"
+                                       placeholder="e.g., Medium, W32 L34, Size 8"
+                                       class="form-control"
+                                       [class.is-invalid]="listingForm.get('measurement')?.invalid && listingForm.get('measurement')?.touched">
+                                <div *ngIf="listingForm.get('measurement')?.invalid && listingForm.get('measurement')?.touched" class="error-message">
+                                    <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
+                                    Size/measurement is required
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="quality">
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    Condition *
+                                </label>
+                                <select id="quality" formControlName="quality" class="form-control">
+                                    <option value="NEW">New</option>
+                                    <option value="LIKE NEW">Like new</option>
+                                    <option value="BARELY WORN">Barely worn</option>
+                                    <option value="USED">Used</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="description">
+                                <i class="fas fa-align-left" aria-hidden="true"></i>
+                                Description (Optional)
+                            </label>
+                            <textarea id="description"
+                                      formControlName="description"
+                                      class="form-control"
+                                      rows="4"
+                                      maxlength="250"
+                                      placeholder="Describe the item's condition, style, brand, or any special features...">
+              </textarea>
+                            <div class="character-counter">
+                                <span [class.warning]="descriptionLength > 200">{{ descriptionLength }}/250 characters</span>
+                            </div>
+                            <div *ngIf="listingForm.get('description')?.invalid && listingForm.get('description')?.touched" class="error-message">
+                                <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
+                                Description is too long (maximum 250 characters)
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" (click)="resetForm()">
+                                <i class="fas fa-undo" aria-hidden="true"></i>
+                                Reset Form
+                            </button>
+                            <button type="submit"
+                                    class="btn btn-primary"
+                                    [disabled]="listingForm.invalid || isSubmitting || !hasPhotoFiles()">
+                                <span *ngIf="isSubmitting" class="spinner"></span>
+                                <i class="fas fa-rocket" aria-hidden="true"></i>
+                                Publish Listing
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- My Listings Section -->
+            <div class="my-listings-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-list" aria-hidden="true"></i>
+                    </div>
+                    <div class="section-title">
+                        <h2>My Listings</h2>
+                        <p>Manage your active listings and track performance</p>
+                    </div>
+                    <div class="section-actions" *ngIf="userListings.length > 0">
+                        <span class="listing-count">{{ userListings.length }} {{ userListings.length === 1 ? 'listing' : 'listings' }}</span>
+                    </div>
+                </div>
+
+                <!-- Loading State -->
+                <div *ngIf="isLoadingUserListings" class="loading-state">
+                    <div class="spinner-container">
+                        <div class="spinner"></div>
+                    </div>
+                    <p>Loading your listings...</p>
+                </div>
+
+                <!-- Empty State -->
+                <div *ngIf="!isLoadingUserListings && userListings.length === 0" class="empty-state">
+                    <div class="empty-icon">
+                        <i class="fas fa-box-open" aria-hidden="true"></i>
+                    </div>
+                    <h3>No listings yet</h3>
+                    <p>Start selling by creating your first listing above!</p>
+                    <button class="btn btn-primary" (click)="scrollToForm()">
+                        <i class="fas fa-plus" aria-hidden="true"></i>
+                        Create First Listing
+                    </button>
+                </div>
+
+                <!-- Statistics -->
+                <div *ngIf="!isLoadingUserListings && userListings.length > 0" class="statistics-card">
+                    <h3>
+                        <i class="fas fa-chart-bar" aria-hidden="true"></i>
+                        Listing Statistics
+                    </h3>
+                    <div class="stats-grid">
+                        <div class="stat-item highest">
+                            <div class="stat-value">${{ highestPrice?.toFixed(2) }}</div>
+                            <div class="stat-label">Highest Price</div>
+                        </div>
+                        <div class="stat-item lowest">
+                            <div class="stat-value">${{ lowestPrice?.toFixed(2) }}</div>
+                            <div class="stat-label">Lowest Price</div>
+                        </div>
+                        <div class="stat-item average">
+                            <div class="stat-value">${{ formattedAveragePrice }}</div>
+                            <div class="stat-label">Average Price</div>
+                        </div>
+                        <div class="stat-item total">
+                            <div class="stat-value">{{ userListings.length }}</div>
+                            <div class="stat-label">Total Listings</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Listings Grid -->
+                <div *ngIf="!isLoadingUserListings && userListings.length > 0" class="listings-grid">
+                    <div class="listing-card"
+                         *ngFor="let listing of userListings"
+                         [class]="getListingCardClass(listing.id)">
+
+                        <div class="listing-image">
+                            <img [src]="getImageUrl(listing.mainPhotoUrl)" [alt]="listing.title" loading="lazy">
+                            <div class="listing-badge" *ngIf="getListingBadge(listing.id)">
+                                <i class="fas" [ngClass]="getListingBadgeIcon(listing.id)" aria-hidden="true"></i>
+                                {{ getListingBadge(listing.id) }}
+                            </div>
+                        </div>
+
+                        <div class="listing-content">
+                            <div class="listing-price">${{ listing.price.toFixed(2) }}</div>
+                            <h4 class="listing-title">{{ listing.title }}</h4>
+                            <div class="listing-meta">
+                                <span class="measurement">
+                                    <i class="fas fa-ruler" aria-hidden="true"></i>
+                                    {{ listing.measurement }}
+                                </span>
+                                <span class="quality">
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    {{ listing.quality }}
+                                </span>
+                            </div>
+                            <div class="listing-date">
+                                <i class="fas fa-calendar" aria-hidden="true"></i>
+                                Listed {{ formatDate(listing.createdAt) }}
+                            </div>
+                        </div>
+
+                        <div class="listing-actions">
+                            <button class="btn btn-outline btn-sm" (click)="editListing(listing.id)">
+                                <i class="fas fa-edit" aria-hidden="true"></i>
+                                Edit
+                            </button>
+                            <button class="btn btn-danger btn-sm" (click)="deleteListing(listing.id)">
+                                <i class="fas fa-trash" aria-hidden="true"></i>
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Delete Confirmation Modal -->
+    <div *ngIf="showDeleteConfirmation" class="modal-overlay" (click)="$event.target === $event.currentTarget && cancelDelete()">
+        <div class="delete-modal">
+            <div class="modal-header">
+                <div class="modal-icon">
+                    <i class="fas fa-trash" aria-hidden="true"></i>
+                </div>
+                <h3>Delete Listing</h3>
+                <p>Are you sure you want to delete this listing? This action cannot be undone.</p>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn btn-secondary" (click)="cancelDelete()">
+                    <i class="fas fa-times" aria-hidden="true"></i>
+                    Cancel
+                </button>
+                <button class="btn btn-danger" (click)="confirmDelete()">
+                    <i class="fas fa-trash" aria-hidden="true"></i>
+                    Delete Listing
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

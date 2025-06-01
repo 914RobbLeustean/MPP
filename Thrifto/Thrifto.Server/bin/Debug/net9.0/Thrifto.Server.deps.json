@@ -8,6 +8,9 @@
     ".NETCoreApp,Version=v9.0": {
       "Thrifto.Server/1.0.0": {
         "dependencies": {
+          "AWSSDK.CloudFormation": "4.0.0.4",
+          "AWSSDK.Extensions.NETCore.Setup": "4.0.1",
+          "AWSSDK.S3": "4.0.0.7",
           "Bogus": "35.6.3",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "8.0.0",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "8.0.2",
@@ -15,10 +18,55 @@
           "Microsoft.EntityFrameworkCore.Design": "9.0.3",
           "Microsoft.EntityFrameworkCore.SqlServer": "9.0.3",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "9.0.4",
+          "QRCoder": "1.4.3",
           "Swashbuckle.AspNetCore": "6.6.2"
         },
         "runtime": {
           "Thrifto.Server.dll": {}
+        }
+      },
+      "AWSSDK.CloudFormation/4.0.0.4": {
+        "dependencies": {
+          "AWSSDK.Core": "4.0.0.5"
+        },
+        "runtime": {
+          "lib/net8.0/AWSSDK.CloudFormation.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.0.0.4"
+          }
+        }
+      },
+      "AWSSDK.Core/4.0.0.5": {
+        "runtime": {
+          "lib/net8.0/AWSSDK.Core.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.0.0.5"
+          }
+        }
+      },
+      "AWSSDK.Extensions.NETCore.Setup/4.0.1": {
+        "dependencies": {
+          "AWSSDK.Core": "4.0.0.5",
+          "Microsoft.Extensions.Configuration.Abstractions": "9.0.3",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.3",
+          "Microsoft.Extensions.Logging.Abstractions": "9.0.3"
+        },
+        "runtime": {
+          "lib/net8.0/AWSSDK.Extensions.NETCore.Setup.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.0.0.0"
+          }
+        }
+      },
+      "AWSSDK.S3/4.0.0.7": {
+        "dependencies": {
+          "AWSSDK.Core": "4.0.0.5"
+        },
+        "runtime": {
+          "lib/net8.0/AWSSDK.S3.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.0.0.7"
+          }
         }
       },
       "Azure.Core/1.38.0": {
@@ -822,6 +870,14 @@
           }
         }
       },
+      "QRCoder/1.4.3": {
+        "runtime": {
+          "lib/net6.0/QRCoder.dll": {
+            "assemblyVersion": "1.4.3.0",
+            "fileVersion": "1.4.3.0"
+          }
+        }
+      },
       "Swashbuckle.AspNetCore/6.6.2": {
         "dependencies": {
           "Microsoft.Extensions.ApiDescription.Server": "6.0.5",
@@ -1110,6 +1166,34 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "AWSSDK.CloudFormation/4.0.0.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-YIRROame7awNdO+PVKrtpl0HZqV8yHKzMK/O3JYLuOlUhAlZFXPwIksqkNrjQFGNDr/63+dEYeg8YgE00oAiTg==",
+      "path": "awssdk.cloudformation/4.0.0.4",
+      "hashPath": "awssdk.cloudformation.4.0.0.4.nupkg.sha512"
+    },
+    "AWSSDK.Core/4.0.0.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-NG31J9azTmY1GKOZd+MFGLUsuD472AGz4BUceTiw0pdYkexD+xJ8kA87hDp/OTk2b6xgrhkQIpnttzIekkMSvw==",
+      "path": "awssdk.core/4.0.0.5",
+      "hashPath": "awssdk.core.4.0.0.5.nupkg.sha512"
+    },
+    "AWSSDK.Extensions.NETCore.Setup/4.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-avdsCcQSdw7iQpHAyKwcA15DmpwUXFZ2jV8YjNgIQq6T4hiJ8/ucFgAwxamibvUB3Wd06FXkWXh2AK8pWGfflA==",
+      "path": "awssdk.extensions.netcore.setup/4.0.1",
+      "hashPath": "awssdk.extensions.netcore.setup.4.0.1.nupkg.sha512"
+    },
+    "AWSSDK.S3/4.0.0.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-dFELsA+Y7aXmvCTL83+oIWmr+0s/GpkqCKZK1ac7HPdYQFv+QHEAhrXdCJknsCKqK+v0yefkLzuKuSSP6k4tmA==",
+      "path": "awssdk.s3/4.0.0.7",
+      "hashPath": "awssdk.s3.4.0.0.7.nupkg.sha512"
     },
     "Azure.Core/1.38.0": {
       "type": "package",
@@ -1481,6 +1565,13 @@
       "sha512": "sha512-mw5vcY2IEc7L+IeGrxpp/J5OSnCcjkjAgJYCm/eD52wpZze8zsSifdqV7zXslSMmfJG2iIUGZyo3KuDtEFKwMQ==",
       "path": "npgsql.entityframeworkcore.postgresql/9.0.4",
       "hashPath": "npgsql.entityframeworkcore.postgresql.9.0.4.nupkg.sha512"
+    },
+    "QRCoder/1.4.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-fWuFqjm8GTlEb2GqBl3Hi8HZZeZQwBSHxvRPtPjyNbT82H0ff0JwavKRBmMaXCno1Av6McPC8aJzri0Mj2w9Jw==",
+      "path": "qrcoder/1.4.3",
+      "hashPath": "qrcoder.1.4.3.nupkg.sha512"
     },
     "Swashbuckle.AspNetCore/6.6.2": {
       "type": "package",

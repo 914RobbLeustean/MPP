@@ -1,0 +1,61 @@
+<!-- src/app/components/shared/search-bar/search-bar.component.html -->
+<form (submit)="onSubmit($event)" class="search-container" [class]="themeClass">
+    <div class="search-input-wrapper">
+        <div class="search-icon-left" *ngIf="showSearchIcon">
+            <i class="fas fa-search"></i>
+        </div>
+
+        <input type="text"
+               [(ngModel)]="searchTerm"
+               name="searchTerm"
+               [placeholder]="placeholder"
+               class="search-input"
+               [class.has-left-icon]="showSearchIcon"
+               [class.has-right-icon]="showClearButton && searchTerm"
+               (input)="onInput()"
+               (focus)="onFocus()"
+               (blur)="onBlur()"
+               [disabled]="isLoading"
+               autocomplete="off"
+               #searchInput>
+
+        <button type="button"
+                class="clear-button"
+                *ngIf="showClearButton && searchTerm && !isLoading"
+                (click)="clearSearch()"
+                aria-label="Clear search">
+            <i class="fas fa-times"></i>
+        </button>
+
+        <div class="loading-indicator" *ngIf="isLoading">
+            <i class="fas fa-spinner fa-spin"></i>
+        </div>
+    </div>
+
+    <button type="submit"
+            class="search-button"
+            [disabled]="isLoading || !searchTerm.trim()"
+            [attr.aria-label]="submitButtonAriaLabel">
+        <span class="button-content">
+            <i class="fas fa-search" *ngIf="!isLoading"></i>
+            <i class="fas fa-spinner fa-spin" *ngIf="isLoading"></i>
+            <span class="button-text" *ngIf="showButtonText">{{ buttonText }}</span>
+        </span>
+    </button>
+
+    <!-- Search suggestions dropdown -->
+    <div class="search-suggestions" *ngIf="showSuggestions && searchSuggestions.length > 0 && isFocused">
+        <div class="suggestions-header" *ngIf="suggestionsTitle">
+            <span>{{ suggestionsTitle }}</span>
+        </div>
+        <button type="button"
+                class="suggestion-item"
+                *ngFor="let suggestion of searchSuggestions; trackBy: trackBySuggestion"
+                (click)="selectSuggestion(suggestion)"
+                (keydown.enter)="selectSuggestion(suggestion)">
+            <i class="fas fa-search suggestion-icon"></i>
+            <span class="suggestion-text">{{ suggestion }}</span>
+            <i class="fas fa-arrow-up-right suggestion-action"></i>
+        </button>
+    </div>
+</form>

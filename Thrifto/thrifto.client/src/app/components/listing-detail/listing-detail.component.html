@@ -1,0 +1,150 @@
+﻿<!-- src/app/components/listing-detail/listing-detail.component.html -->
+<div class="listing-detail-container">
+
+    <!-- Main Content - No Loading States (Don't Make Me Think) -->
+    <div class="listing-content" *ngIf="listing">
+
+        <!-- Hero Section: Asymmetrical Grid (Making and Breaking the Grid) -->
+        <section class="hero-section">
+            <div class="container">
+                <div class="hero-layout">
+
+                    <!-- Image Dominance - Left Side -->
+                    <div class="image-section">
+                        <div class="main-image-container">
+                            <img [src]="getImageUrl(selectedImage)" [alt]="listing.title" class="main-image">
+
+                            <!-- Subtle Trust Signal -->
+                            <div class="authenticity-badge">
+                                <i class="fas fa-shield-check"></i>
+                                <span>Verified Item</span>
+                            </div>
+                        </div>
+
+                        <!-- Minimal Thumbnails -->
+                        <div class="thumbnail-strip" *ngIf="listing?.photoUrls && listing.photoUrls.length > 1">
+                            <button *ngFor="let photo of listing.photoUrls; let i = index"
+                                    class="thumbnail-btn"
+                                    [class.active]="selectedImage === photo"
+                                    (click)="selectImage(photo)">
+                                <img [src]="getImageUrl(photo)" [alt]="'View ' + (i + 1)">
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Purchase Decision Zone - Right Side -->
+                    <div class="decision-section">
+
+                        <!-- Clear Hierarchy: Price First (Don't Make Me Think) -->
+                        <div class="price-hero">
+                            <span class="price-amount">${{ listing.price | number:'1.2-2' }}</span>
+                            <span class="price-context">Sustainable Choice</span>
+                        </div>
+
+                        <!-- Product Title - Secondary -->
+                        <h1 class="product-title">{{ listing.title }}</h1>
+
+                        <!-- Essential Info Only (Progressive Disclosure) -->
+                        <div class="essential-info">
+                            <div class="info-chip quality-chip" [ngClass]="getQualityClass(listing.quality)">
+                                <i class="fas fa-star"></i>
+                                {{ listing.quality }}
+                            </div>
+                            <div class="info-chip size-chip">
+                                <i class="fas fa-ruler-horizontal"></i>
+                                {{ listing.measurement }}
+                            </div>
+                        </div>
+
+                        <!-- Social Proof (Seductive Interaction Design) -->
+                        <div class="seller-trust">
+                            <div class="seller-avatar">
+                                {{ listing.userName.charAt(0).toUpperCase() }}
+                            </div>
+                            <div class="seller-info">
+                                <span class="seller-name">{{ listing.userName }}</span>
+                                <span class="seller-status">
+                                    <i class="fas fa-check-circle"></i>
+                                    Trusted Seller
+                                </span>
+                            </div>
+                            <div class="listing-age">
+                                {{ getTimeAgo(listing.createdAt) }}
+                            </div>
+                        </div>
+
+                        <!-- Primary Action - Obvious (Don't Make Me Think) -->
+                        <div class="action-zone">
+                            <button class="btn-primary-action" (click)="addToCart()">
+                                <i class="fas fa-shopping-bag"></i>
+                                <span class="action-text">Add to Cart</span>
+                                <span class="action-subtitle">Free returns • Fast shipping</span>
+                            </button>
+
+                            <button class="btn-secondary-action" (click)="contactSeller()">
+                                <i class="fas fa-message"></i>
+                                <span>Ask Question</span>
+                            </button>
+                        </div>
+
+                        <!-- Progressive Disclosure: Description -->
+                        <div class="description-toggle" *ngIf="hasDescription()">
+                            <button class="disclosure-btn"
+                                    [class.expanded]="showDescription"
+                                    (click)="toggleDescription()">
+                                <span>{{ showDescription ? 'Hide' : 'Show' }} Description</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+
+                            <div class="description-content" [class.visible]="showDescription">
+                                <p>{{ getDescription() }}</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Secondary Information - Minimalist Cards -->
+        <section class="details-section" *ngIf="showDescription">
+            <div class="container">
+                <div class="details-grid">
+
+                    <!-- Sustainability Impact (Seductive Design) -->
+                    <div class="impact-card">
+                        <div class="card-icon sustainability">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                        <h3>Environmental Impact</h3>
+                        <p>By choosing pre-loved fashion, you're reducing waste and carbon footprint by up to 73%</p>
+                    </div>
+
+                    <!-- Care Instructions -->
+                    <div class="care-card">
+                        <div class="card-icon care">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <h3>Care & Quality</h3>
+                        <p>This {{ listing.quality.toLowerCase() }} item has been carefully inspected and is ready for its next adventure</p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Simplified Error State -->
+    <div class="error-state" *ngIf="!listing && !isLoading">
+        <div class="container">
+            <div class="error-content">
+                <i class="fas fa-search"></i>
+                <h2>Item Not Found</h2>
+                <p>This listing may have been sold or removed</p>
+                <a routerLink="/" class="btn-simple">← Browse More Items</a>
+            </div>
+        </div>
+    </div>
+
+</div>

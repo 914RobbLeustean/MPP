@@ -26,9 +26,11 @@ namespace ThriftoServer.Controllers
             [FromQuery] int page = 1,
             [FromQuery] int pageSize = 10,
             [FromQuery] string quality = null,
-            [FromQuery] string sortBy = "newest")
+            [FromQuery] string sortBy = "newest",
+            [FromQuery] decimal? minPrice = null,
+            [FromQuery] decimal? maxPrice = null)
         {
-            var result = await _listingService.GetListingsAsync(page, pageSize, quality, sortBy);
+            var result = await _listingService.GetListingsAsync(page, pageSize, quality, sortBy, minPrice, maxPrice);
             return Ok(result);
         }
 
@@ -106,11 +108,14 @@ namespace ThriftoServer.Controllers
         }
 
         [HttpGet("search")]
-        public async Task<ActionResult<IEnumerable<ListingDto>>> SearchListings([FromQuery] string q)
+        public async Task<ActionResult<IEnumerable<ListingDto>>> SearchListings(
+            [FromQuery] string q,
+            [FromQuery] decimal? minPrice = null,
+            [FromQuery] decimal? maxPrice = null)
         {
             if (string.IsNullOrEmpty(q)) return BadRequest("Search query cannot be empty");
 
-            var listings = await _listingService.SearchListingsAsync(q);
+            var listings = await _listingService.SearchListingsAsync(q, minPrice, maxPrice);
 
             return Ok(listings);
         }

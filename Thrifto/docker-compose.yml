@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: thrifto-postgres
+    environment:
+      POSTGRES_DB: thrifto
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 12345
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - thrifto-network
+
+  backend:
+    build:
+      context: .
+      dockerfile: Thrifto.Server/Dockerfile
+    container_name: thrifto-backend
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=thrifto;Username=postgres;Password=12345
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    networks:
+      - thrifto-network
+
+  frontend:
+    build:
+      context: .
+      dockerfile: thrifto.client/Dockerfile
+    container_name: thrifto-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - thrifto-network
+
+volumes:
+  postgres_data:
+
+networks:
+  thrifto-network:
+    driver: bridge

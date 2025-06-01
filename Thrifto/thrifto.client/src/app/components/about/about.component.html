@@ -1,0 +1,142 @@
+<!-- src/app/components/about/about.component.html -->
+<div class="about-container">
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-background"></div>
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">About Thrifto</h1>
+                <p class="hero-subtitle">Sustainable fashion, one piece at a time</p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">1000+</span>
+                        <span class="stat-label">Items Listed</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">500+</span>
+                        <span class="stat-label">Happy Users</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">95%</span>
+                        <span class="stat-label">Satisfaction Rate</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Story Section -->
+    <section class="story-section">
+        <div class="container">
+            <div class="section-content">
+                <div class="section-text">
+                    <div class="section-badge">Our Story</div>
+                    <h2>From frustration to solution</h2>
+                    <p>Endless nights were wasted by scrolling through websites trying to find cheap and unique pieces. You're not alone.</p>
+                    <p>Thrifto is here to change that. We're a community-driven platform that makes it easy to buy and sell pre-owned clothing.</p>
+                    <div class="highlight-box">
+                        <p><strong>The mission is simple:</strong> Make sustainable fashion accessible, affordable, and exciting for everyone.</p>
+                    </div>
+                </div>
+                <div class="section-image">
+                    <div class="image-wrapper">
+                        <img src="assets/images/about-story.png" alt="Thrifto's journey" class="rounded-image">
+                        <div class="image-overlay"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Section -->
+    <section class="why-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Why Thrifto?</h2>
+                <p>Built with passion for sustainable fashion and modern technology</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card" *ngFor="let feature of features">
+                    <div class="feature-icon" [innerHTML]="feature.icon"></div>
+                    <h3>{{ feature.title }}</h3>
+                    <p>{{ feature.description }}</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact Section -->
+    <section class="impact-section">
+        <div class="container">
+            <div class="impact-content">
+                <div class="impact-text">
+                    <h2>Making a Real Impact</h2>
+                    <p>Every piece of clothing that finds a new home through Thrifto is a step towards a more sustainable future.</p>
+                    <div class="impact-stats">
+                        <div class="impact-stat">
+                            <span class="impact-number">2.5 tons</span>
+                            <span class="impact-label">CO₂ Saved</span>
+                        </div>
+                        <div class="impact-stat">
+                            <span class="impact-number">1,200</span>
+                            <span class="impact-label">Items Reused</span>
+                        </div>
+                        <div class="impact-stat">
+                            <span class="impact-number">85%</span>
+                            <span class="impact-label">Less Waste</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="impact-visual">
+                    <div class="circle-progress">
+                        <svg viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="45" fill="none" stroke="#e3f2fd" stroke-width="8" />
+                            <circle cx="50" cy="50" r="45" fill="none" stroke="#2196f3" stroke-width="8"
+                                    stroke-dasharray="283" stroke-dashoffset="85" stroke-linecap="round"
+                                    transform="rotate(-90 50 50)" />
+                        </svg>
+                        <div class="progress-text">
+                            <span class="progress-number">70%</span>
+                            <span class="progress-label">Sustainability Goal</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Values Section -->
+    <section class="values-section">
+        <div class="container">
+            <h2 class="section-title">Core Values</h2>
+            <div class="values-grid">
+                <div class="value-card" *ngFor="let value of values">
+                    <div class="value-icon">
+                        <i [class]="value.iconClass"></i>
+                    </div>
+                    <h3>{{ value.title }}</h3>
+                    <p>{{ value.description }}</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Ready to join the sustainable fashion revolution?</h2>
+                <p>Start your journey with Thrifto today. Buy unique pieces or give your clothes a second life.</p>
+                <div class="cta-buttons">
+                    <button class="btn btn-primary" (click)="navigateToShop()">
+                        <span>Browse Listings</span>
+                        <i class="arrow">→</i>
+                    </button>
+                    <button class="btn btn-secondary" (click)="navigateToContact()">
+                        <span>Get in Touch</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

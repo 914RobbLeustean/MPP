@@ -1,0 +1,130 @@
+/* src/app/components/auth/register/register.component.scss */
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 60px - 200px); // Subtract header and footer height
+  padding: 40px 20px;
+  background-color: #f5f5f5;
+}
+
+.auth-card {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  width: 100%;
+  max-width: 500px;
+
+  h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+  }
+
+  .form-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 0;
+
+    @media (max-width: 576px) {
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .half {
+      flex: 1;
+    }
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+
+      &:focus {
+        outline: none;
+        border-color: #a83939;
+      }
+
+      &.is-invalid {
+        border-color: #f44336;
+      }
+    }
+
+    .invalid-feedback {
+      color: #f44336;
+      font-size: 14px;
+      margin-top: 5px;
+    }
+  }
+
+  .btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background-color: #a83939;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: darken(#a83939, 10%);
+    }
+
+    &:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    .spinner-border {
+      display: inline-block;
+      width: 1rem;
+      height: 1rem;
+      border: 0.2em solid currentColor;
+      border-right-color: transparent;
+      border-radius: 50%;
+      animation: spinner-border .75s linear infinite;
+      margin-right: 8px;
+    }
+  }
+
+  .auth-footer {
+    margin-top: 20px;
+    text-align: center;
+
+    p {
+      color: #666;
+      font-size: 14px;
+
+      a {
+        color: #a83939;
+        text-decoration: none;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
+  @keyframes spinner-border {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}

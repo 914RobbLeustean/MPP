@@ -1,0 +1,186 @@
+﻿<!-- src/app/components/search/search.component.html -->
+<div class="search-component-container">
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-background"></div>
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <h1>Discover Pre-Loved Treasures</h1>
+                <p>Find unique, sustainable fashion pieces that tell a story</p>
+
+                <div class="search-bar-container">
+                    <app-search-bar [initialValue]="searchQuery"
+                                    (searchQuery)="onSearchUpdate($event)">
+                    </app-search-bar>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section" *ngIf="searchQuery && !isLoading">
+        <div class="container">
+            <div class="stats-card">
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-tshirt"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>{{ searchResults.length }}</h3>
+                        <p>{{ searchResults.length === 1 ? 'Item Found' : 'Items Found' }}</p>
+                    </div>
+                </div>
+
+                <div class="stat-item" *ngIf="searchResults.length > 0">
+                    <div class="stat-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>{{ calculateSavings() }}kg</h3>
+                        <p>CO₂ Saved</p>
+                    </div>
+                </div>
+
+                <div class="stat-item" *ngIf="searchResults.length > 0">
+                    <div class="stat-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>${{ getAveragePrice() }}</h3>
+                        <p>Avg. Price</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Loading State -->
+    <section class="loading-section" *ngIf="isLoading">
+        <div class="container">
+            <div class="loading-card">
+                <div class="loading-spinner">
+                    <div class="spinner-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                </div>
+                <h3>Searching for treasures...</h3>
+                <p>We're finding the perfect pre-loved items for you</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- No Results State -->
+    <section class="no-results-section" *ngIf="!isLoading && searchResults.length === 0 && searchQuery">
+        <div class="container">
+            <div class="no-results-card">
+                <div class="no-results-icon">
+                    <i class="fas fa-search-minus"></i>
+                </div>
+                <h3>No treasures found for "{{ searchQuery }}"</h3>
+                <p>Don't worry! Try adjusting your search or explore our suggestions below.</p>
+
+                <div class="action-buttons">
+                    <button class="btn-primary" (click)="clearSearch()">
+                        <i class="fas fa-times"></i>
+                        Clear Search
+                    </button>
+                    <button class="btn-secondary" (click)="exploreCategories()">
+                        <i class="fas fa-th-large"></i>
+                        Browse Categories
+                    </button>
+                </div>
+
+                <div class="search-tips">
+                    <h4>Search Tips:</h4>
+                    <ul>
+                        <li>Try different keywords or brands</li>
+                        <li>Check your spelling</li>
+                        <li>Use broader terms like "dress" instead of "vintage summer dress"</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Search Prompt -->
+    <section class="search-prompt-section" *ngIf="!isLoading && !searchQuery">
+        <div class="container">
+            <div class="search-prompt-card">
+                <div class="prompt-icon">
+                    <i class="fas fa-magic"></i>
+                </div>
+                <h3>Start Your Sustainable Fashion Journey</h3>
+                <p>Enter a search term above to discover amazing pre-loved clothing items.</p>
+
+                <div class="popular-searches">
+                    <h4>Popular Searches:</h4>
+                    <div class="search-tags">
+                        <button class="search-tag" *ngFor="let tag of popularSearches"
+                                (click)="searchPopular(tag)">
+                            {{ tag }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Search Results -->
+    <section class="results-section" *ngIf="!isLoading && searchResults.length > 0">
+        <div class="container">
+            <div class="results-header">
+                <h2>Search Results</h2>
+                <div class="sort-filter-controls">
+                    <select class="sort-select" [(ngModel)]="sortOption" (change)="onSortChange()">
+                        <option value="newest">Newest First</option>
+                        <option value="oldest">Oldest First</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- ✅ ADD: Price Filter Section -->
+            <div class="filters-section">
+                <div class="filters-container">
+                    <app-price-range-filter [initialMin]="priceFilter.min"
+                                            [initialMax]="priceFilter.max"
+                                            [absoluteMin]="0"
+                                            [absoluteMax]="maxAvailablePrice"
+                                            [theme]="'teal'"
+                                            [showPresets]="true"
+                                            (priceRangeChange)="onPriceRangeChange($event)"
+                                            (filterReset)="onPriceFilterReset()">
+                    </app-price-range-filter>
+                </div>
+            </div>
+
+            <div class="listings-grid">
+                <div class="listing-card"
+                     *ngFor="let listing of searchResults; trackBy: trackByListingId"
+                     (click)="viewListingDetails(listing.id)">
+                    <app-listing-item [listing]="listing"></app-listing-item>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" *ngIf="!isLoading">
+        <div class="container">
+            <div class="cta-content">
+                <div class="cta-icon">
+                    <i class="fas fa-plus-circle"></i>
+                </div>
+                <h3>Can't find what you're looking for?</h3>
+                <p>List your own items and help someone else find their perfect piece!</p>
+                <button class="btn-cta" (click)="goToSell()">
+                    <i class="fas fa-upload"></i>
+                    Sell Your Items
+                </button>
+            </div>
+        </div>
+    </section>
+</div>

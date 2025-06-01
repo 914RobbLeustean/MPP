@@ -1,0 +1,21 @@
+<!-- src/app/components/shared/network-status/network-status.component.html -->
+<!-- CHANGE: Only show the status bar when there are connection issues -->
+<div *ngIf="connectionStatus !== ConnectionStatus.Online"
+     class="network-status-container"
+     [ngClass]="connectionStatus.toLowerCase()">
+    <div class="status-indicator">
+        <ng-container [ngSwitch]="connectionStatus">
+            <!-- REMOVE: Online case since we're not showing it anymore -->
+            <span *ngSwitchCase="ConnectionStatus.Offline" class="offline">
+                <i class="fas fa-wifi-slash"></i> Offline - Changes will sync when connection is restored
+            </span>
+            <span *ngSwitchCase="ConnectionStatus.ServerDown" class="server-down">
+                <i class="fas fa-server"></i> Server Down - Working in offline mode
+            </span>
+        </ng-container>
+    </div>
+
+    <button class="check-connection-btn" (click)="checkConnection()">
+        Check Connection
+    </button>
+</div>

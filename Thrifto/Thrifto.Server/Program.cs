@@ -2,6 +2,7 @@ using Amazon.S3;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
@@ -66,11 +67,7 @@ builder.Services.AddCors(options =>
         policy.AllowAnyHeader()
               .AllowAnyMethod()
               .WithOrigins(
-                  "https://127.0.0.1:5043", // Development
-                  "http://localhost:4200", // Local Angular dev
-                  "http://thrifto-alb-1677825063.us-east-1.elb.amazonaws.com", // Your ALB
-                  "http://localhost:80", // Frontend container
-                  "http://localhost" // Frontend container without port
+                  "https://127.0.0.1:5043" // Development
               )
               .AllowCredentials();
     });
@@ -92,7 +89,8 @@ builder.Services.AddIdentityCore<User>(opt =>
     opt.Password.RequireNonAlphanumeric = false;
 })
 .AddEntityFrameworkStores<AppDbContext>()
-.AddSignInManager<SignInManager<User>>();
+.AddSignInManager<SignInManager<User>>()
+.AddDefaultTokenProviders();
 
 // Add Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -125,6 +123,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 // Add Services
 builder.Services.AddScoped<TokenService>();
+builder.Services.AddScoped<TwoFactorService>();
 builder.Services.AddScoped<FileService>();
 builder.Services.AddScoped<ListingService>();
 builder.Services.AddScoped<ChatService>();
@@ -135,15 +134,41 @@ builder.Services.AddScoped<DataSeeder>();
 
 // Add SignalR
 builder.Services.AddSignalR();
-builder.Services.AddHostedService<ListingGeneratorService>();
+// builder.Services.AddHostedService<ListingGeneratorService>();
 
 
-builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
-builder.Services.AddAWSService<IAmazonS3>();
-builder.Services.AddScoped<IS3Service, S3Service>();
+//builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
+//builder.Services.AddAWSService<IAmazonS3>();
+//builder.Services.AddScoped<IS3Service, S3Service>();
+
+builder.Services.AddHttpContextAccessor();
+
+
+if (builder.Environment.IsDevelopment())
+{
+    // Use local file storage for development
+    builder.Services.AddScoped<IS3Service, LocalFileService>();
+    builder.Services.AddLogging();
+}
+else
+{
+    // Use S3 for production/staging
+    builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
+    builder.Services.AddAWSService<IAmazonS3>();
+    builder.Services.AddScoped<IS3Service, S3Service>();
+}
 
 
 var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    var uploadsPath = Path.Combine(app.Environment.WebRootPath, "uploads");
+    if (!Directory.Exists(uploadsPath))
+    {
+        Directory.CreateDirectory(uploadsPath);
+    }
+}
 
 // Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
@@ -158,7 +183,13 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(builder.Environment.WebRootPath, "uploads")),
+    RequestPath = "/uploads"
+});
 
 // Use CORS before auth middleware
 app.UseCors("CorsPolicy");

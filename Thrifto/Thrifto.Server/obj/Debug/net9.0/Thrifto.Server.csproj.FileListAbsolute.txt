@@ -166,7 +166,6 @@ C:\Users\leust\source\repos\MPP-main\Thrifto\Thrifto.Server\obj\Debug\net9.0\sta
 C:\Users\leust\source\repos\MPP-main\Thrifto\Thrifto.Server\obj\Debug\net9.0\staticwebassets\msbuild.buildMultiTargeting.Thrifto.Server.props
 C:\Users\leust\source\repos\MPP-main\Thrifto\Thrifto.Server\obj\Debug\net9.0\staticwebassets\msbuild.buildTransitive.Thrifto.Server.props
 C:\Users\leust\source\repos\MPP-main\Thrifto\Thrifto.Server\obj\Debug\net9.0\staticwebassets.pack.json
-C:\Users\leust\source\repos\MPP-main\Thrifto\Thrifto.Server\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 C:\Users\leust\source\repos\MPP-main\Thrifto\Thrifto.Server\obj\Debug\net9.0\Thrifto..5C901B11.Up2Date
 C:\Users\leust\source\repos\MPP-main\Thrifto\Thrifto.Server\obj\Debug\net9.0\Thrifto.Server.dll
 C:\Users\leust\source\repos\MPP-main\Thrifto\Thrifto.Server\obj\Debug\net9.0\refint\Thrifto.Server.dll
@@ -174,3 +173,10 @@ C:\Users\leust\source\repos\MPP-main\Thrifto\Thrifto.Server\obj\Debug\net9.0\Thr
 C:\Users\leust\source\repos\MPP-main\Thrifto\Thrifto.Server\obj\Debug\net9.0\Thrifto.Server.genruntimeconfig.cache
 C:\Users\leust\source\repos\MPP-main\Thrifto\Thrifto.Server\obj\Debug\net9.0\ref\Thrifto.Server.dll
 C:\Users\leust\source\repos\MPP-main\Thrifto\Thrifto.Server\bin\Debug\net9.0\Bogus.dll
+C:\Users\leust\source\repos\MPP-main\Thrifto\Thrifto.Server\bin\Debug\net9.0\appsettings.Production.json
+C:\Users\leust\source\repos\MPP-main\Thrifto\Thrifto.Server\bin\Debug\net9.0\AWSSDK.CloudFormation.dll
+C:\Users\leust\source\repos\MPP-main\Thrifto\Thrifto.Server\bin\Debug\net9.0\AWSSDK.Core.dll
+C:\Users\leust\source\repos\MPP-main\Thrifto\Thrifto.Server\bin\Debug\net9.0\AWSSDK.Extensions.NETCore.Setup.dll
+C:\Users\leust\source\repos\MPP-main\Thrifto\Thrifto.Server\bin\Debug\net9.0\AWSSDK.S3.dll
+C:\Users\leust\source\repos\MPP-Main\Thrifto\Thrifto.Server\bin\Debug\net9.0\QRCoder.dll
+C:\Users\leust\source\repos\MPP-main\Thrifto\Thrifto.Server\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt

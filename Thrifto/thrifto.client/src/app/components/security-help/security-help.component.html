@@ -1,0 +1,409 @@
+<!-- src/app/components/security-help/security-help.component.html -->
+<div class="security-help-container">
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-background"></div>
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-icon">
+                    <i class="fas fa-question-circle" aria-hidden="true"></i>
+                </div>
+                <h1>Security Help</h1>
+                <p>Learn how to keep your Thrifto account secure with our comprehensive security guides and resources.</p>
+
+                <!-- Search Bar -->
+                <div class="help-search">
+                    <div class="search-container">
+                        <i class="fas fa-search" aria-hidden="true"></i>
+                        <input type="text"
+                               [(ngModel)]="searchQuery"
+                               (input)="onSearch()"
+                               placeholder="Search security topics..."
+                               class="search-input">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Actions Section -->
+    <section class="quick-actions-section">
+        <div class="container">
+            <h2>Quick Actions</h2>
+            <div class="quick-actions-grid">
+                <div class="action-card" (click)="navigateToAccountSettings()">
+                    <div class="action-icon">
+                        <i class="fas fa-shield-alt" aria-hidden="true"></i>
+                    </div>
+                    <h3>Enable 2FA</h3>
+                    <p>Secure your account with two-factor authentication</p>
+                </div>
+
+                <div class="action-card" (click)="scrollToSection('password-security')">
+                    <div class="action-icon">
+                        <i class="fas fa-key" aria-hidden="true"></i>
+                    </div>
+                    <h3>Password Security</h3>
+                    <p>Learn about creating strong passwords</p>
+                </div>
+
+                <div class="action-card" (click)="scrollToSection('account-recovery')">
+                    <div class="action-icon">
+                        <i class="fas fa-life-ring" aria-hidden="true"></i>
+                    </div>
+                    <h3>Account Recovery</h3>
+                    <p>Get help recovering your account</p>
+                </div>
+
+                <div class="action-card" (click)="contactSecurity()">
+                    <div class="action-icon">
+                        <i class="fas fa-headset" aria-hidden="true"></i>
+                    </div>
+                    <h3>Contact Support</h3>
+                    <p>Get help from our security team</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="content-section">
+        <div class="container">
+            <div class="help-layout">
+                <!-- Sidebar Navigation -->
+                <div class="help-sidebar">
+                    <div class="sidebar-content">
+                        <h3>Topics</h3>
+                        <ul class="topic-nav">
+                            <li *ngFor="let section of helpSections"
+                                [class.active]="activeSection === section.id"
+                                (click)="scrollToSection(section.id)">
+                                <i class="fas" [ngClass]="section.icon" aria-hidden="true"></i>
+                                {{ section.title }}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Main Help Content -->
+                <div class="help-content">
+                    <!-- Two-Factor Authentication -->
+                    <div id="two-factor-auth" class="help-section">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i class="fas fa-mobile-alt" aria-hidden="true"></i>
+                            </div>
+                            <div class="section-title">
+                                <h2>Two-Factor Authentication</h2>
+                                <p>Add an extra layer of security to your account</p>
+                            </div>
+                        </div>
+
+                        <div class="content-cards">
+                            <div class="content-card">
+                                <h3>What is Two-Factor Authentication?</h3>
+                                <p>Two-factor authentication (2FA) adds an extra security step when logging into your account. Even if someone knows your password, they won't be able to access your account without the second factor - typically a code from your phone.</p>
+                            </div>
+
+                            <div class="content-card">
+                                <h3>How to Enable 2FA</h3>
+                                <ol class="step-list">
+                                    <li>Go to your Account Settings</li>
+                                    <li>Find the Two-Factor Authentication section</li>
+                                    <li>Click "Enable 2FA"</li>
+                                    <li>Download an authenticator app (Google Authenticator, Authy, etc.)</li>
+                                    <li>Scan the QR code with your app</li>
+                                    <li>Enter the 6-digit verification code</li>
+                                    <li>Save your recovery codes securely</li>
+                                </ol>
+                            </div>
+
+                            <div class="content-card">
+                                <h3>Recommended Authenticator Apps</h3>
+                                <ul class="app-list">
+                                    <li><strong>Google Authenticator</strong> - Free, simple to use</li>
+                                    <li><strong>Authy</strong> - Cloud backup, multi-device sync</li>
+                                    <li><strong>Microsoft Authenticator</strong> - Integrated with Microsoft accounts</li>
+                                    <li><strong>1Password</strong> - Part of password manager</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Password Security -->
+                    <div id="password-security" class="help-section">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i class="fas fa-key" aria-hidden="true"></i>
+                            </div>
+                            <div class="section-title">
+                                <h2>Password Security</h2>
+                                <p>Create and manage strong, secure passwords</p>
+                            </div>
+                        </div>
+
+                        <div class="content-cards">
+                            <div class="content-card">
+                                <h3>Creating a Strong Password</h3>
+                                <div class="password-requirements">
+                                    <div class="requirement">
+                                        <i class="fas fa-check-circle" aria-hidden="true"></i>
+                                        <span>At least 12 characters long</span>
+                                    </div>
+                                    <div class="requirement">
+                                        <i class="fas fa-check-circle" aria-hidden="true"></i>
+                                        <span>Mix of uppercase and lowercase letters</span>
+                                    </div>
+                                    <div class="requirement">
+                                        <i class="fas fa-check-circle" aria-hidden="true"></i>
+                                        <span>Include numbers and special characters</span>
+                                    </div>
+                                    <div class="requirement">
+                                        <i class="fas fa-check-circle" aria-hidden="true"></i>
+                                        <span>Avoid common words or personal information</span>
+                                    </div>
+                                    <div class="requirement">
+                                        <i class="fas fa-check-circle" aria-hidden="true"></i>
+                                        <span>Use a unique password for each account</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="content-card">
+                                <h3>Password Manager Recommendations</h3>
+                                <p>We recommend using a password manager to generate and store strong, unique passwords:</p>
+                                <ul class="manager-list">
+                                    <li><strong>1Password</strong> - Premium option with excellent security</li>
+                                    <li><strong>Bitwarden</strong> - Open source with free tier</li>
+                                    <li><strong>LastPass</strong> - Popular choice with good features</li>
+                                    <li><strong>Dashlane</strong> - User-friendly with VPN included</li>
+                                </ul>
+                            </div>
+
+                            <div class="content-card warning-card">
+                                <h3>⚠️ What to Avoid</h3>
+                                <ul class="avoid-list">
+                                    <li>Using the same password across multiple sites</li>
+                                    <li>Including personal information (birthdate, name, etc.)</li>
+                                    <li>Common patterns (123456, password, qwerty)</li>
+                                    <li>Sharing passwords with others</li>
+                                    <li>Storing passwords in unsecure locations</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Account Recovery -->
+                    <div id="account-recovery" class="help-section">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i class="fas fa-life-ring" aria-hidden="true"></i>
+                            </div>
+                            <div class="section-title">
+                                <h2>Account Recovery</h2>
+                                <p>Regain access to your account when locked out</p>
+                            </div>
+                        </div>
+
+                        <div class="content-cards">
+                            <div class="content-card">
+                                <h3>Forgot Your Password?</h3>
+                                <ol class="step-list">
+                                    <li>Go to the login page</li>
+                                    <li>Click "Forgot Password?"</li>
+                                    <li>Enter your email address</li>
+                                    <li>Check your email for a reset link</li>
+                                    <li>Click the link and create a new password</li>
+                                </ol>
+                            </div>
+
+                            <div class="content-card">
+                                <h3>Can't Access Your 2FA Device?</h3>
+                                <p>If you can't access your authenticator app, you can use your recovery codes:</p>
+                                <ol class="step-list">
+                                    <li>On the login page, enter your username and password</li>
+                                    <li>When prompted for 2FA code, click "Use recovery code"</li>
+                                    <li>Enter one of your saved recovery codes</li>
+                                    <li>Once logged in, set up 2FA again with a new device</li>
+                                </ol>
+                            </div>
+
+                            <div class="content-card emergency-card">
+                                <h3>🆘 Emergency Recovery</h3>
+                                <p>If you don't have access to your email or recovery codes:</p>
+                                <ol class="step-list">
+                                    <li>Contact our security team immediately</li>
+                                    <li>Provide proof of identity (ID, account information)</li>
+                                    <li>Our team will verify your identity manually</li>
+                                    <li>Once verified, we'll help restore access</li>
+                                </ol>
+                                <button class="btn btn-primary" (click)="contactSecurity()">
+                                    <i class="fas fa-phone" aria-hidden="true"></i>
+                                    Contact Security Team
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Privacy Settings -->
+                    <div id="privacy-settings" class="help-section">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i class="fas fa-user-secret" aria-hidden="true"></i>
+                            </div>
+                            <div class="section-title">
+                                <h2>Privacy Settings</h2>
+                                <p>Control your personal information and privacy</p>
+                            </div>
+                        </div>
+
+                        <div class="content-cards">
+                            <div class="content-card">
+                                <h3>Profile Visibility</h3>
+                                <p>Control who can see your profile information:</p>
+                                <ul>
+                                    <li><strong>Public</strong> - Anyone can see your profile</li>
+                                    <li><strong>Buyers Only</strong> - Only verified buyers can contact you</li>
+                                    <li><strong>Private</strong> - Only you can see your full profile</li>
+                                </ul>
+                            </div>
+
+                            <div class="content-card">
+                                <h3>Data Collection</h3>
+                                <p>We collect minimal data necessary for the marketplace to function:</p>
+                                <ul>
+                                    <li>Account information (email, name)</li>
+                                    <li>Listing and transaction history</li>
+                                    <li>Communication records</li>
+                                    <li>Usage analytics (anonymized)</li>
+                                </ul>
+                            </div>
+
+                            <div class="content-card">
+                                <h3>Your Rights</h3>
+                                <ul>
+                                    <li><strong>Access</strong> - Request a copy of your data</li>
+                                    <li><strong>Correction</strong> - Update incorrect information</li>
+                                    <li><strong>Deletion</strong> - Request account deletion</li>
+                                    <li><strong>Portability</strong> - Export your data</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Suspicious Activity -->
+                    <div id="suspicious-activity" class="help-section">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
+                            </div>
+                            <div class="section-title">
+                                <h2>Suspicious Activity</h2>
+                                <p>Recognize and report potential security threats</p>
+                            </div>
+                        </div>
+
+                        <div class="content-cards">
+                            <div class="content-card warning-card">
+                                <h3>🚨 Signs of Compromise</h3>
+                                <ul class="warning-list">
+                                    <li>Unexpected login notifications</li>
+                                    <li>Password reset emails you didn't request</li>
+                                    <li>Changes to your account you didn't make</li>
+                                    <li>Unusual activity in your account</li>
+                                    <li>Friends reporting spam from your account</li>
+                                </ul>
+                            </div>
+
+                            <div class="content-card">
+                                <h3>What to Do</h3>
+                                <ol class="step-list">
+                                    <li><strong>Change your password immediately</strong></li>
+                                    <li>Enable 2FA if not already active</li>
+                                    <li>Review recent account activity</li>
+                                    <li>Check other accounts with the same password</li>
+                                    <li>Report the incident to our security team</li>
+                                </ol>
+                            </div>
+
+                            <div class="content-card">
+                                <h3>Common Scams to Avoid</h3>
+                                <ul>
+                                    <li><strong>Phishing emails</strong> - We'll never ask for passwords via email</li>
+                                    <li><strong>Fake support calls</strong> - We don't make unsolicited calls</li>
+                                    <li><strong>Too-good-to-be-true deals</strong> - Verify seller credentials</li>
+                                    <li><strong>Urgent payment requests</strong> - Take time to verify</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+        <div class="container">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-grid">
+                <div class="faq-item" *ngFor="let faq of filteredFaqs" (click)="toggleFaq(faq.id)">
+                    <div class="faq-question">
+                        <h3>{{ faq.question }}</h3>
+                        <i class="fas" [ngClass]="faq.expanded ? 'fa-chevron-up' : 'fa-chevron-down'" aria-hidden="true"></i>
+                    </div>
+                    <div class="faq-answer" [ngClass]="{ 'expanded': faq.expanded }">
+                        <p [innerHTML]="faq.answer"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section">
+        <div class="container">
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3>Still Need Help?</h3>
+                    <p>Our security team is here to help you with any account security questions or concerns.</p>
+
+                    <div class="contact-methods">
+                        <div class="contact-method">
+                            <div class="method-icon">
+                                <i class="fas fa-envelope" aria-hidden="true"></i>
+                            </div>
+                            <div class="method-content">
+                                <h4>Email Support</h4>
+                                <p>security@thrifto.com</p>
+                                <span>Response within 24 hours</span>
+                            </div>
+                        </div>
+
+                        <div class="contact-method">
+                            <div class="method-icon">
+                                <i class="fas fa-comments" aria-hidden="true"></i>
+                            </div>
+                            <div class="method-content">
+                                <h4>Live Chat</h4>
+                                <p>Available 9 AM - 6 PM EEST</p>
+                                <span>Instant response</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact-actions">
+                    <button class="btn btn-primary" (click)="contactSecurity()">
+                        <i class="fas fa-headset" aria-hidden="true"></i>
+                        Contact Security Team
+                    </button>
+                    <button class="btn btn-outline" (click)="navigateToSecurityCenter()">
+                        <i class="fas fa-shield-alt" aria-hidden="true"></i>
+                        Security Center
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

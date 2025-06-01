@@ -1,0 +1,282 @@
+<!-- src/app/components/security-center/security-center.component.html -->
+<div class="security-center-container">
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-background"></div>
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-icon">
+                    <i class="fas fa-shield-check" aria-hidden="true"></i>
+                </div>
+                <h1>Security Center</h1>
+                <p>Monitor and manage your account security with comprehensive tools and insights.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Security Overview Section -->
+    <section class="content-section">
+        <div class="container">
+            <div class="security-overview">
+                <h2>Security Overview</h2>
+
+                <div class="security-score-card">
+                    <div class="score-display">
+                        <div class="score-circle" [ngClass]="getSecurityScoreClass()">
+                            <span class="score-number">{{ securityScore }}</span>
+                            <span class="score-total">/100</span>
+                        </div>
+                        <div class="score-info">
+                            <h3>Security Score</h3>
+                            <p class="score-description">{{ getSecurityScoreDescription() }}</p>
+                        </div>
+                    </div>
+
+                    <div class="score-actions">
+                        <button class="btn btn-primary" (click)="improveSecurityScore()">
+                            <i class="fas fa-arrow-up" aria-hidden="true"></i>
+                            Improve Score
+                        </button>
+                    </div>
+                </div>
+
+                <div class="security-status-grid">
+                    <div class="status-item" [ngClass]="{ 'enabled': twoFactorEnabled, 'disabled': !twoFactorEnabled }">
+                        <div class="status-icon">
+                            <i class="fas fa-mobile-alt" aria-hidden="true"></i>
+                        </div>
+                        <div class="status-content">
+                            <h4>Two-Factor Authentication</h4>
+                            <p>{{ twoFactorEnabled ? 'Active and protecting your account' : 'Not enabled - recommended for security' }}</p>
+                        </div>
+                        <div class="status-indicator">
+                            <i class="fas" [ngClass]="twoFactorEnabled ? 'fa-check-circle' : 'fa-exclamation-triangle'" aria-hidden="true"></i>
+                        </div>
+                    </div>
+
+                    <div class="status-item" [ngClass]="{ 'enabled': strongPassword, 'disabled': !strongPassword }">
+                        <div class="status-icon">
+                            <i class="fas fa-key" aria-hidden="true"></i>
+                        </div>
+                        <div class="status-content">
+                            <h4>Strong Password</h4>
+                            <p>{{ strongPassword ? 'Your password meets security requirements' : 'Consider using a stronger password' }}</p>
+                        </div>
+                        <div class="status-indicator">
+                            <i class="fas" [ngClass]="strongPassword ? 'fa-check-circle' : 'fa-exclamation-triangle'" aria-hidden="true"></i>
+                        </div>
+                    </div>
+
+                    <div class="status-item" [ngClass]="{ 'enabled': recentActivity, 'disabled': !recentActivity }">
+                        <div class="status-icon">
+                            <i class="fas fa-history" aria-hidden="true"></i>
+                        </div>
+                        <div class="status-content">
+                            <h4>Recent Activity</h4>
+                            <p>{{ recentActivity ? 'No suspicious activity detected' : 'Please review recent activity' }}</p>
+                        </div>
+                        <div class="status-indicator">
+                            <i class="fas" [ngClass]="recentActivity ? 'fa-check-circle' : 'fa-exclamation-triangle'" aria-hidden="true"></i>
+                        </div>
+                    </div>
+
+                    <div class="status-item" [ngClass]="{ 'enabled': emailVerified, 'disabled': !emailVerified }">
+                        <div class="status-icon">
+                            <i class="fas fa-envelope-check" aria-hidden="true"></i>
+                        </div>
+                        <div class="status-content">
+                            <h4>Email Verification</h4>
+                            <p>{{ emailVerified ? 'Your email address is verified' : 'Please verify your email address' }}</p>
+                        </div>
+                        <div class="status-indicator">
+                            <i class="fas" [ngClass]="emailVerified ? 'fa-check-circle' : 'fa-exclamation-triangle'" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security Features Grid -->
+            <div class="security-features">
+                <h2>Security Features</h2>
+
+                <div class="features-grid">
+                    <!-- Two-Factor Authentication -->
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt" aria-hidden="true"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h3>Two-Factor Authentication</h3>
+                            <p>Add an extra layer of security to your account with authenticator apps.</p>
+                            <div class="feature-status">
+                                <span class="status-badge" [ngClass]="twoFactorEnabled ? 'enabled' : 'disabled'">
+                                    {{ twoFactorEnabled ? 'Enabled' : 'Disabled' }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="feature-actions">
+                            <button class="btn" [ngClass]="twoFactorEnabled ? 'btn-secondary' : 'btn-primary'"
+                                    (click)="navigateToAccountSettings()">
+                                {{ twoFactorEnabled ? 'Manage' : 'Enable' }}
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Login History -->
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-history" aria-hidden="true"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h3>Login History</h3>
+                            <p>Review your recent login activity and monitor for unauthorized access.</p>
+                            <div class="feature-meta">
+                                <span>Last login: {{ lastLoginDate | date:'medium' }}</span>
+                            </div>
+                        </div>
+                        <div class="feature-actions">
+                            <button class="btn btn-outline" (click)="viewLoginHistory()">
+                                View History
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Device Management -->
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-devices" aria-hidden="true"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h3>Device Management</h3>
+                            <p>Manage devices that have access to your account and revoke unauthorized access.</p>
+                            <div class="feature-meta">
+                                <span>{{ activeDevices }} active devices</span>
+                            </div>
+                        </div>
+                        <div class="feature-actions">
+                            <button class="btn btn-outline" (click)="manageDevices()">
+                                Manage Devices
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Privacy Settings -->
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-user-secret" aria-hidden="true"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h3>Privacy Settings</h3>
+                            <p>Control your privacy preferences and data sharing settings.</p>
+                            <div class="feature-meta">
+                                <span>Profile visibility: {{ profileVisibility }}</span>
+                            </div>
+                        </div>
+                        <div class="feature-actions">
+                            <button class="btn btn-outline" (click)="managePrivacy()">
+                                Privacy Settings
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Security Notifications -->
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-bell-exclamation" aria-hidden="true"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h3>Security Notifications</h3>
+                            <p>Get notified about important security events and suspicious activity.</p>
+                            <div class="feature-status">
+                                <span class="status-badge" [ngClass]="securityNotifications ? 'enabled' : 'disabled'">
+                                    {{ securityNotifications ? 'Enabled' : 'Disabled' }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="feature-actions">
+                            <button class="btn btn-outline" (click)="manageNotifications()">
+                                Configure
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Data Download -->
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-download" aria-hidden="true"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h3>Data Download</h3>
+                            <p>Download a copy of your personal data and account information.</p>
+                            <div class="feature-meta">
+                                <span>Last export: {{ lastDataExport | date:'short' || 'Never' }}</span>
+                            </div>
+                        </div>
+                        <div class="feature-actions">
+                            <button class="btn btn-outline" (click)="downloadData()">
+                                Export Data
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Security Activity -->
+            <div class="security-activity">
+                <div class="activity-header">
+                    <h2>Recent Security Activity</h2>
+                    <button class="btn btn-outline" (click)="viewAllActivity()">
+                        <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                        View All
+                    </button>
+                </div>
+
+                <div class="activity-list" *ngIf="securityActivity.length > 0; else noActivity">
+                    <div class="activity-item" *ngFor="let activity of securityActivity.slice(0, 5)">
+                        <div class="activity-icon" [ngClass]="getActivityIconClass(activity.type)">
+                            <i class="fas" [ngClass]="getActivityIcon(activity.type)" aria-hidden="true"></i>
+                        </div>
+                        <div class="activity-content">
+                            <h4>{{ activity.title }}</h4>
+                            <p>{{ activity.description }}</p>
+                            <span class="activity-time">{{ activity.timestamp | date:'medium' }}</span>
+                        </div>
+                        <div class="activity-status" [ngClass]="activity.severity">
+                            <i class="fas fa-circle" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <ng-template #noActivity>
+                    <div class="no-activity">
+                        <div class="no-activity-icon">
+                            <i class="fas fa-shield-check" aria-hidden="true"></i>
+                        </div>
+                        <h3>No Recent Security Events</h3>
+                        <p>Your account has been secure with no recent security events to report.</p>
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call-to-Action Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h3>Stay Secure on Thrifto</h3>
+                <p>Keep your account protected by following security best practices and staying informed about potential threats.</p>
+                <div class="cta-buttons">
+                    <button class="btn btn-primary" (click)="navigateToSecurityHelp()">
+                        <i class="fas fa-question-circle" aria-hidden="true"></i>
+                        Security Help
+                    </button>
+                    <button class="btn btn-outline" (click)="contactSecurity()">
+                        <i class="fas fa-headset" aria-hidden="true"></i>
+                        Contact Security Team
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

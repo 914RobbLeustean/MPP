@@ -19,15 +19,21 @@ namespace ThriftoServer.Services
     public class ListingService
     {
         private readonly AppDbContext _context;
-        private readonly FileService _fileService;
+        private readonly IS3Service _s3Service;
 
-        public ListingService(AppDbContext context, FileService fileService)
+        public ListingService(AppDbContext context, IS3Service s3Service)
         {
             _context = context;
-            _fileService = fileService;
+            _s3Service = s3Service;
         }
 
-        public async Task<PaginatedResult<ListingDto>> GetListingsAsync(int page = 1, int pageSize = 10, string quality = null, string sortBy = "newest")
+        public async Task<PaginatedResult<ListingDto>> GetListingsAsync(
+            int page = 1,
+            int pageSize = 10,
+            string quality = null,
+            string sortBy = "newest",
+            decimal? minPrice = null,
+            decimal? maxPrice = null)
         {
             var query = _context.Listings
                 .Include(l => l.Photos)
@@ -35,10 +41,21 @@ namespace ThriftoServer.Services
                 .Where(l => l.IsActive)
                 .AsQueryable();
 
-            // Apply filters
+            // Apply quality filter
             if (!string.IsNullOrEmpty(quality))
             {
                 query = query.Where(l => l.Quality == quality);
+            }
+
+            // ✅ FIXED: Apply price range filters
+            if (minPrice.HasValue)
+            {
+                query = query.Where(l => l.Price >= minPrice.Value);
+            }
+
+            if (maxPrice.HasValue)
+            {
+                query = query.Where(l => l.Price <= maxPrice.Value);
             }
 
             // Get total count before pagination
@@ -50,6 +67,8 @@ namespace ThriftoServer.Services
                 "price_asc" => query.OrderBy(l => l.Price),
                 "price_desc" => query.OrderByDescending(l => l.Price),
                 "oldest" => query.OrderBy(l => l.CreatedAt),
+                "popularity" => query.OrderByDescending(l => l.CreatedAt), // Could implement proper popularity logic
+                "sustainability" => query.OrderBy(l => l.Price), // Lower price = more sustainable for now
                 _ => query.OrderByDescending(l => l.CreatedAt) // "newest" is default
             };
 
@@ -79,7 +98,7 @@ namespace ThriftoServer.Services
             return listings.Select(MapListingToDto);
         }
 
-        public async Task<ListingDto> GetListingByIdAsync(int id)   
+        public async Task<ListingDto> GetListingByIdAsync(int id)
         {
             var listing = await _context.Listings
                 .Include(l => l.Photos)
@@ -127,7 +146,7 @@ namespace ThriftoServer.Services
                     var photo = listingDto.Photos.ElementAt(i);
                     if (photo != null && photo.Length > 0)
                     {
-                        var photoUrl = await _fileService.SaveFileAsync(photo);
+                        var photoUrl = await _s3Service.UploadFileAsync(photo, "uploads");
 
                         photos.Add(new ListingPhoto
                         {
@@ -175,7 +194,7 @@ namespace ThriftoServer.Services
             {
                 foreach (var photo in listing.Photos)
                 {
-                    await _fileService.DeleteFileAsync(photo.Url);
+                    await _s3Service.DeleteFileAsync(photo.Url);
                 }
 
                 _context.ListingPhotos.RemoveRange(listing.Photos);
@@ -191,7 +210,7 @@ namespace ThriftoServer.Services
                     var photo = listingDto.Photos.ElementAt(i);
                     if (photo != null && photo.Length > 0)
                     {
-                        var photoUrl = await _fileService.SaveFileAsync(photo);
+                        var photoUrl = await _s3Service.UploadFileAsync(photo, "uploads");
 
                         newPhotos.Add(new ListingPhoto
                         {
@@ -225,22 +244,36 @@ namespace ThriftoServer.Services
             }
         }
 
-        public async Task<IEnumerable<ListingDto>> SearchListingsAsync(string searchTerm)
+        public async Task<IEnumerable<ListingDto>> SearchListingsAsync(string searchTerm, decimal? minPrice = null, decimal? maxPrice = null)
         {
             if (string.IsNullOrWhiteSpace(searchTerm))
                 return Enumerable.Empty<ListingDto>();
 
             var normalizedSearchTerm = searchTerm.ToLower();
 
-            var listings = await _context.Listings
+            var query = _context.Listings
                 .Include(l => l.Photos)
                 .Include(l => l.User)
                 .Where(l => l.IsActive &&
                             (l.Title.ToLower().Contains(normalizedSearchTerm) ||
                              l.Measurement.ToLower().Contains(normalizedSearchTerm) ||
                              l.Quality.ToLower().Contains(normalizedSearchTerm)))
+                .AsQueryable();
+
+            // ✅ FIXED: Apply price range filters for search
+            if (minPrice.HasValue)
+            {
+                query = query.Where(l => l.Price >= minPrice.Value);
+            }
+
+            if (maxPrice.HasValue)
+            {
+                query = query.Where(l => l.Price <= maxPrice.Value);
+            }
+
+            var listings = await query
                 .OrderByDescending(l => l.CreatedAt)
-                .Take(20)
+                .Take(100) // Increased limit for better search results
                 .ToListAsync();
 
             return listings.Select(MapListingToDto);

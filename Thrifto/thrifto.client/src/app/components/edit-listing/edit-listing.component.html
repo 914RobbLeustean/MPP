@@ -1,0 +1,296 @@
+<!-- src/app/components/edit-listing/edit-listing.component.html -->
+<div class="edit-listing-container">
+
+    <!-- Progress Header: Clear Mental Model (Don't Make Me Think) -->
+    <div class="progress-header">
+        <div class="container">
+            <div class="progress-content">
+                <div class="progress-indicator">
+                    <div class="step-line" [class.complete]="hasBasicInfo()"></div>
+                    <div class="step-circle active">
+                        <i class="fas fa-edit"></i>
+                    </div>
+                </div>
+                <div class="progress-text">
+                    <h1>Edit Your Listing</h1>
+                    <p>Make changes to keep your item attractive to buyers</p>
+                </div>
+                <div class="save-status" [ngClass]="getSaveStatusClass()">
+                    <i class="fas" [ngClass]="getSaveStatusIcon()"></i>
+                    <span>{{ saveStatusMessage }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Edit Workspace: Focused Layout -->
+    <div class="edit-workspace" *ngIf="listing">
+        <div class="container">
+
+            <form [formGroup]="listingForm" (ngSubmit)="onSubmit()" class="edit-form">
+
+                <!-- Left Column: Visual Content -->
+                <div class="visual-section">
+
+                    <!-- Photo Management: Drag & Drop Experience -->
+                    <div class="photo-manager">
+                        <div class="section-header">
+                            <h3>
+                                <i class="fas fa-camera"></i>
+                                Photos
+                            </h3>
+                            <span class="photo-count">{{ getPhotoCount() }}/4</span>
+                        </div>
+
+                        <!-- Main Photo Display -->
+                        <div class="main-photo-container"
+                             (dragover)="onDragOver($event)"
+                             (drop)="onDrop($event, 0)"
+                             (click)="triggerFileInput(0)">
+
+                            <div class="photo-slot main-slot" *ngIf="photos[0]; else emptyMainSlot">
+                                <img [src]="photos[0]" alt="Main product photo">
+                                <div class="photo-controls">
+                                    <button type="button" class="photo-btn delete" (click)="removePhoto(0, $event)">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                                <div class="main-badge">Main</div>
+                            </div>
+
+                            <ng-template #emptyMainSlot>
+                                <div class="empty-slot main-empty">
+                                    <i class="fas fa-camera-retro"></i>
+                                    <span class="primary-text">Add Main Photo</span>
+                                    <span class="secondary-text">Drag & drop or click to upload</span>
+                                </div>
+                            </ng-template>
+                        </div>
+
+                        <!-- Additional Photos Grid -->
+                        <div class="additional-photos">
+                            <div *ngFor="let photo of photos.slice(1, 4); let i = index"
+                                 class="photo-slot additional-slot"
+                                 (dragover)="onDragOver($event)"
+                                 (drop)="onDrop($event, i + 1)"
+                                 (click)="triggerFileInput(i + 1)">
+
+                                <div *ngIf="photo; else emptySlot" class="photo-content">
+                                    <img [src]="photo" alt="Additional photo">
+                                    <button type="button" class="photo-btn delete" (click)="removePhoto(i + 1, $event)">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+
+                                <ng-template #emptySlot>
+                                    <div class="empty-slot">
+                                        <i class="fas fa-plus"></i>
+                                        <span>Add Photo</span>
+                                    </div>
+                                </ng-template>
+                            </div>
+                        </div>
+
+                        <!-- Photo Options -->
+                        <div class="photo-options">
+                            <label class="option-toggle">
+                                <input type="checkbox" formControlName="deleteExistingPhotos">
+                                <span class="toggle-slider"></span>
+                                <span class="option-text">Replace all existing photos</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Live Preview Card (Seductive Design) -->
+                    <div class="preview-card">
+                        <div class="preview-header">
+                            <i class="fas fa-eye"></i>
+                            <span>Live Preview</span>
+                        </div>
+                        <div class="preview-content">
+                            <div class="preview-image">
+                                <img [src]="getPreviewImage()" alt="Preview">
+                            </div>
+                            <div class="preview-info">
+                                <h4>{{ listingForm.get('title')?.value || 'Your Item Title' }}</h4>
+                                <p class="preview-price">${{ listingForm.get('price')?.value || '0.00' }}</p>
+                                <span class="preview-quality">{{ listingForm.get('quality')?.value || 'Quality' }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Form Content -->
+                <div class="form-section">
+
+                    <!-- Essential Details: Progressive Form Design -->
+                    <div class="form-group-set">
+                        <div class="set-header">
+                            <h3>
+                                <i class="fas fa-info-circle"></i>
+                                Essential Details
+                            </h3>
+                            <div class="completion-indicator" [class.complete]="isEssentialComplete()">
+                                <i class="fas fa-check"></i>
+                            </div>
+                        </div>
+
+                        <!-- Title Input: Most Important -->
+                        <div class="form-group priority">
+                            <label class="form-label">
+                                <span class="label-text">Title</span>
+                                <span class="label-hint">Make it descriptive and searchable</span>
+                            </label>
+                            <input type="text"
+                                   formControlName="title"
+                                   class="form-input"
+                                   placeholder="e.g., Vintage Levi's Denim Jacket"
+                                   [class.error]="listingForm.get('title')?.invalid && listingForm.get('title')?.touched">
+                            <div class="input-feedback" *ngIf="listingForm.get('title')?.invalid && listingForm.get('title')?.touched">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                Title is required
+                            </div>
+                        </div>
+
+                        <!-- Price Input: Clear Value Prop -->
+                        <div class="form-group priority">
+                            <label class="form-label">
+                                <span class="label-text">Price</span>
+                                <span class="label-hint">Competitive pricing gets more views</span>
+                            </label>
+                            <div class="price-input-wrapper">
+                                <span class="currency-symbol">$</span>
+                                <input type="number"
+                                       formControlName="price"
+                                       class="form-input price-input"
+                                       placeholder="0.00"
+                                       step="0.01"
+                                       min="0.01"
+                                       [class.error]="listingForm.get('price')?.invalid && listingForm.get('price')?.touched">
+                            </div>
+                            <div class="input-feedback" *ngIf="listingForm.get('price')?.invalid && listingForm.get('price')?.touched">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                Please enter a valid price
+                            </div>
+                        </div>
+
+                        <!-- Quality & Size: Side by Side -->
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <span class="label-text">Quality</span>
+                                </label>
+                                <select formControlName="quality" class="form-select">
+                                    <option value="NEW">New</option>
+                                    <option value="LIKE NEW">Like New</option>
+                                    <option value="BARELY WORN">Barely Worn</option>
+                                    <option value="USED">Used</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <span class="label-text">Size/Measurement</span>
+                                </label>
+                                <input type="text"
+                                       formControlName="measurement"
+                                       class="form-input"
+                                       placeholder="e.g., M, 32W, UK 10"
+                                       [class.error]="listingForm.get('measurement')?.invalid && listingForm.get('measurement')?.touched">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Description: Progressive Disclosure -->
+                    <div class="form-group-set">
+                        <div class="set-header">
+                            <h3>
+                                <i class="fas fa-align-left"></i>
+                                Description
+                            </h3>
+                            <div class="optional-badge">Optional</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                <span class="label-text">Tell buyers more about this item</span>
+                                <span class="label-hint">Mention condition details, brand, style, or why you're selling</span>
+                            </label>
+                            <textarea formControlName="description"
+                                      class="form-textarea"
+                                      rows="4"
+                                      maxlength="250"
+                                      placeholder="This item is in excellent condition with no visible wear. I'm selling because..."></textarea>
+
+                            <div class="textarea-footer">
+                                <div class="character-counter">
+                                    <span [class.warning]="getCharacterCount() > 220">
+                                        {{ getCharacterCount() }}/250
+                                    </span>
+                                </div>
+                                <button type="button" class="text-helper-btn" (click)="suggestDescription()">
+                                    <i class="fas fa-magic"></i>
+                                    Get suggestions
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Zone: Clear & Confident -->
+                    <div class="action-zone">
+                        <div class="action-buttons">
+                            <button type="button"
+                                    class="btn-secondary"
+                                    (click)="cancel()"
+                                    [disabled]="isSubmitting">
+                                <i class="fas fa-times"></i>
+                                <span>Cancel</span>
+                            </button>
+
+                            <button type="submit"
+                                    class="btn-primary"
+                                    [disabled]="listingForm.invalid || isSubmitting">
+                                <div class="btn-content">
+                                    <i class="fas" [ngClass]="isSubmitting ? 'fa-spinner fa-spin' : 'fa-save'"></i>
+                                    <span>{{ isSubmitting ? 'Updating...' : 'Update Listing' }}</span>
+                                </div>
+                            </button>
+                        </div>
+
+                        <!-- Confidence Builder -->
+                        <div class="action-footer">
+                            <div class="confidence-items">
+                                <div class="confidence-item">
+                                    <i class="fas fa-shield-alt"></i>
+                                    <span>Changes saved securely</span>
+                                </div>
+                                <div class="confidence-item">
+                                    <i class="fas fa-eye"></i>
+                                    <span>Preview before publishing</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <!-- Success/Error States: Immediate Feedback -->
+    <div class="feedback-overlay" [class.visible]="showSuccessNotification || showFailedNotification">
+        <div class="feedback-card success" *ngIf="showSuccessNotification">
+            <i class="fas fa-check-circle"></i>
+            <h3>Listing Updated!</h3>
+            <p>Your changes have been saved successfully</p>
+        </div>
+
+        <div class="feedback-card error" *ngIf="showFailedNotification">
+            <i class="fas fa-exclamation-circle"></i>
+            <h3>Update Failed</h3>
+            <p>{{ errorMessage || 'Please try again or contact support' }}</p>
+        </div>
+    </div>
+
+</div>

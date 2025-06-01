@@ -1,0 +1,100 @@
+<!-- src/app/components/faq/faq.component.html -->
+<div class="faq-container">
+    <!-- Hero Section -->
+    <section class="faq-hero">
+        <div class="hero-background"></div>
+        <div class="container">
+            <div class="hero-content">
+                <h1>Frequently Asked Questions</h1>
+                <p>Find answers to the most common questions about using Thrifto</p>
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text"
+                           placeholder="Search for answers..."
+                           [(ngModel)]="searchTerm"
+                           (input)="filterFAQs()">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Content -->
+    <section class="faq-content">
+        <div class="container">
+            <div class="faq-grid">
+                <!-- FAQ Categories -->
+                <div class="faq-categories">
+                    <h3>Browse by Category</h3>
+                    <div class="category-list">
+                        <button *ngFor="let category of categories"
+                                class="category-btn"
+                                [class.active]="selectedCategory === category.id"
+                                (click)="selectCategory(category.id)">
+                            <i [class]="category.icon"></i>
+                            <span>{{ category.name }}</span>
+                            <span class="count">({{ category.count }})</span>
+                        </button>
+                    </div>
+
+                    <div class="help-card">
+                        <div class="help-icon">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <h4>Still Need Help?</h4>
+                        <p>Can't find what you're looking for? Our support team is here to help.</p>
+                        <a routerLink="/contact" class="help-link">Contact Support</a>
+                    </div>
+                </div>
+
+                <!-- FAQ List -->
+                <div class="faq-main">
+                    <div class="faq-header">
+                        <h2>{{ getSelectedCategoryName() }}</h2>
+                        <p class="results-count">{{ filteredFaqs.length }} questions found</p>
+                    </div>
+
+                    <div class="faq-list">
+                        <div class="faq-item"
+                             *ngFor="let item of filteredFaqs; let i = index"
+                             [class.popular]="item.isPopular">
+                            <div class="faq-question" (click)="toggleFaq(i)">
+                                <div class="question-content">
+                                    <span *ngIf="item.isPopular" class="popular-badge">Popular</span>
+                                    <h3>{{ item.question }}</h3>
+                                </div>
+                                <div class="question-toggle">
+                                    <i class="fas fa-chevron-down" [class.rotated]="item.isOpen"></i>
+                                </div>
+                            </div>
+
+                            <div class="faq-answer" [class.open]="item.isOpen">
+                                <div class="answer-content">
+                                    <p>{{ item.answer }}</p>
+                                    <div class="answer-actions">
+                                        <button class="helpful-btn" (click)="markHelpful(i)">
+                                            <i class="fas fa-thumbs-up"></i>
+                                            Helpful ({{ item.helpfulCount || 0 }})
+                                        </button>
+                                        <button class="share-btn" (click)="shareQuestion(item)">
+                                            <i class="fas fa-share"></i>
+                                            Share
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div *ngIf="filteredFaqs.length === 0" class="no-results">
+                        <div class="no-results-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h3>No results found</h3>
+                        <p>Try searching with different keywords or browse our categories.</p>
+                        <button class="btn btn-primary" (click)="clearSearch()">Clear Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

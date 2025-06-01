@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  backend:
+    image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/thrifto-backend:latest
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=${DATABASE_CONNECTION_STRING}
+      - TokenKey=${JWT_TOKEN_KEY}
+      - AWS__Region=${AWS_REGION}
+      - AWS__S3__BucketName=${S3_BUCKET_NAME}
+    ports:
+      - "8080:8080"
+    logging:
+      driver: awslogs
+      options:
+        awslogs-group: /ecs/thrifto-backend
+        awslogs-region: ${AWS_REGION}
+        awslogs-stream-prefix: ecs
+
+  frontend:
+    image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/thrifto-frontend:latest
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    logging:
+      driver: awslogs
+      options:
+        awslogs-group: /ecs/thrifto-frontend
+        awslogs-region: ${AWS_REGION}
+        awslogs-stream-prefix: ecs

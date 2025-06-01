@@ -1197,6 +1197,15 @@
           }
         }
       },
+      "QRCoder/1.4.3": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/QRCoder.dll": {}
+        },
+        "runtime": {
+          "lib/net6.0/QRCoder.dll": {}
+        }
+      },
       "Swashbuckle.AspNetCore/6.6.2": {
         "type": "package",
         "dependencies": {
@@ -4176,6 +4185,27 @@
         "postgresql.png"
       ]
     },
+    "QRCoder/1.4.3": {
+      "sha512": "fWuFqjm8GTlEb2GqBl3Hi8HZZeZQwBSHxvRPtPjyNbT82H0ff0JwavKRBmMaXCno1Av6McPC8aJzri0Mj2w9Jw==",
+      "type": "package",
+      "path": "qrcoder/1.4.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net35/QRCoder.dll",
+        "lib/net40/QRCoder.dll",
+        "lib/net5.0-windows7.0/QRCoder.dll",
+        "lib/net5.0/QRCoder.dll",
+        "lib/net6.0-windows7.0/QRCoder.dll",
+        "lib/net6.0/QRCoder.dll",
+        "lib/netstandard1.3/QRCoder.dll",
+        "lib/netstandard2.0/QRCoder.dll",
+        "nuget-icon.png",
+        "nuget-readme.md",
+        "qrcoder.1.4.3.nupkg.sha512",
+        "qrcoder.nuspec"
+      ]
+    },
     "Swashbuckle.AspNetCore/6.6.2": {
       "sha512": "+NB4UYVYN6AhDSjW0IJAd1AGD8V33gemFNLPaxKTtPkHB+HaKAKf9MGAEUPivEWvqeQfcKIw8lJaHq6LHljRuw==",
       "type": "package",
@@ -5317,6 +5347,7 @@
       "Microsoft.EntityFrameworkCore.Design >= 9.0.3",
       "Microsoft.EntityFrameworkCore.SqlServer >= 9.0.3",
       "Npgsql.EntityFrameworkCore.PostgreSQL >= 9.0.4",
+      "QRCoder >= 1.4.3",
       "Swashbuckle.AspNetCore >= 6.6.2"
     ]
   },
@@ -5327,11 +5358,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\leust\\source\\repos\\MPP-main\\Thrifto\\Thrifto.Server\\Thrifto.Server.csproj",
+      "projectUniqueName": "C:\\Users\\leust\\source\\repos\\MPP-Main\\Thrifto\\Thrifto.Server\\Thrifto.Server.csproj",
       "projectName": "Thrifto.Server",
-      "projectPath": "C:\\Users\\leust\\source\\repos\\MPP-main\\Thrifto\\Thrifto.Server\\Thrifto.Server.csproj",
+      "projectPath": "C:\\Users\\leust\\source\\repos\\MPP-Main\\Thrifto\\Thrifto.Server\\Thrifto.Server.csproj",
       "packagesPath": "C:\\Users\\leust\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\leust\\source\\repos\\MPP-main\\Thrifto\\Thrifto.Server\\obj\\",
+      "outputPath": "C:\\Users\\leust\\source\\repos\\MPP-Main\\Thrifto\\Thrifto.Server\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -5412,6 +5443,10 @@
           "Npgsql.EntityFrameworkCore.PostgreSQL": {
             "target": "Package",
             "version": "[9.0.4, )"
+          },
+          "QRCoder": {
+            "target": "Package",
+            "version": "[1.4.3, )"
           },
           "Swashbuckle.AspNetCore": {
             "target": "Package",

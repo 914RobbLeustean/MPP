@@ -1,0 +1,326 @@
+<!-- src/app/components/home/home.component.html -->
+<div class="home-experience">
+
+    <!-- Storytelling Hero: Emotional Connection (Seductive Design) -->
+    <section class="narrative-hero">
+        <div class="hero-canvas">
+
+            <!-- Dynamic Background Elements -->
+            <div class="floating-elements">
+                <div class="element sustainability" [style.animation-delay]="'0s'">
+                    <i class="fas fa-leaf"></i>
+                </div>
+                <div class="element circular" [style.animation-delay]="'1s'">
+                    <i class="fas fa-recycle"></i>
+                </div>
+                <div class="element community" [style.animation-delay]="'2s'">
+                    <i class="fas fa-heart"></i>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="hero-narrative">
+                        
+                    <!-- Main Story -->
+                    <div class="story-content">
+                        <div class="story-badge">
+                            <span class="badge-text">Since 2024</span>
+                            <span class="badge-stat">{{ getTotalItemsSaved() }}+ items saved</span>
+                        </div>
+
+                        <h1 class="story-headline">
+                            Every Thread Tells a
+                            <span class="headline-accent">Story</span>
+                        </h1>
+
+                        <p class="story-description">
+                            Join thousands who've discovered that pre-loved fashion isn't just about style -
+                            it's about <strong>reducing waste</strong>, <strong>supporting communities</strong>,
+                            and <strong>creating stories</strong> that matter.
+                        </p>
+
+                        <!-- Interactive Search Experience -->
+                        <div class="search-experience">
+                            <div class="search-prompt">
+                                <span class="prompt-text">What story will you discover today?</span>
+                            </div>
+                            <app-search-bar [liveUpdate]="false"
+                                            (searchQuery)="onSearch($event)">
+                            </app-search-bar>
+                        </div>
+
+                        <!-- Impact Counter (Seductive Design) -->
+                        <div class="impact-metrics">
+                            <div class="metric" *ngFor="let metric of impactMetrics">
+                                <div class="metric-icon">
+                                    <i [class]="metric.icon"></i>
+                                </div>
+                                <div class="metric-content">
+                                    <span class="metric-value">{{ metric.value }}</span>
+                                    <span class="metric-label">{{ metric.label }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Hero Visual -->
+                    <div class="hero-visual">
+                        <div class="visual-frame">
+                            <div class="featured-item"
+                                 *ngIf="heroFeaturedItem"
+                                 (click)="viewListingDetails(heroFeaturedItem.id)"
+                                 [class.loading]="isLoading">
+
+                                <div class="item-image">
+                                    <img [src]="getImageUrl(heroFeaturedItem.mainPhotoUrl)"
+                                         [alt]="heroFeaturedItem.title">
+
+                                    <!-- Story Overlay -->
+                                    <div class="story-overlay">
+                                        <div class="story-tag">Featured Story</div>
+                                        <p class="item-story">
+                                            "This {{ heroFeaturedItem.quality.toLowerCase() }} {{ heroFeaturedItem.title.toLowerCase() }}
+                                            is ready for its next adventure..."
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="item-details">
+                                    <h3>{{ heroFeaturedItem.title }}</h3>
+                                    <span class="item-price">${{ heroFeaturedItem.price }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Discovery Section: Magazine Layout (Breaking the Grid) -->
+    <section class="discovery-magazine">
+        <div class="container">
+
+            <!-- Section Header with Editorial Feel -->
+            <div class="magazine-header">
+                <div class="header-content">
+                    <h2 class="section-title">Stories Worth Discovering</h2>
+                    <p class="section-subtitle">Curated finds with character and charm</p>
+                </div>
+                <div class="header-visual">
+                    <div class="discovery-badge">
+                        <span>{{ featuredListings.length }} New Stories</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Asymmetrical Grid Layout -->
+            <div class="magazine-grid" *ngIf="!isLoading">
+
+                <!-- Large Featured Card -->
+                <div class="featured-story"
+                     *ngIf="featuredListings[0]"
+                     (click)="viewListingDetails(featuredListings[0].id)"
+                     (mouseenter)="onItemHover(featuredListings[0])"
+                     (mouseleave)="onItemLeave()">
+
+                    <div class="story-image">
+                        <img [src]="getImageUrl(featuredListings[0].mainPhotoUrl)"
+                             [alt]="featuredListings[0].title">
+                        <div class="story-gradient"></div>
+                    </div>
+
+                    <div class="story-content">
+                        <div class="story-meta">
+                            <span class="quality-badge" [ngClass]="getQualityClass(featuredListings[0].quality)">
+                                {{ featuredListings[0].quality }}
+                            </span>
+                            <span class="story-time">{{ getTimeAgo(featuredListings[0].createdAt) }}</span>
+                        </div>
+
+                        <h3 class="story-title">{{ featuredListings[0].title }}</h3>
+                        <p class="story-excerpt">{{ getStoryExcerpt(featuredListings[0]) }}</p>
+
+                        <div class="story-footer">
+                            <span class="story-price">${{ featuredListings[0].price }}</span>
+                            <span class="story-seller">by {{ featuredListings[0].userName }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Medium Cards Grid -->
+                <div class="medium-stories">
+                    <div class="medium-story"
+                         *ngFor="let listing of featuredListings.slice(1, 3)"
+                         (click)="viewListingDetails(listing.id)"
+                         (mouseenter)="onItemHover(listing)"
+                         (mouseleave)="onItemLeave()">
+
+                        <div class="medium-image">
+                            <img [src]="getImageUrl(listing.mainPhotoUrl)" [alt]="listing.title">
+                            <div class="hover-overlay">
+                                <i class="fas fa-eye"></i>
+                                <span>View Story</span>
+                            </div>
+                        </div>
+
+                        <div class="medium-content">
+                            <span class="medium-quality" [ngClass]="getQualityClass(listing.quality)">
+                                {{ listing.quality }}
+                            </span>
+                            <h4>{{ listing.title }}</h4>
+                            <div class="medium-footer">
+                                <span class="medium-price">${{ listing.price }}</span>
+                                <span class="medium-seller">{{ listing.userName }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Small Stories Sidebar -->
+                <div class="small-stories">
+                    <div class="sidebar-header">
+                        <h4>Quick Discoveries</h4>
+                        <span>More stories awaiting</span>
+                    </div>
+
+                    <div class="small-story"
+                         *ngFor="let listing of featuredListings.slice(3)"
+                         (click)="viewListingDetails(listing.id)">
+
+                        <div class="small-image">
+                            <img [src]="getImageUrl(listing.mainPhotoUrl)" [alt]="listing.title">
+                        </div>
+
+                        <div class="small-content">
+                            <h5>{{ listing.title }}</h5>
+                            <div class="small-meta">
+                                <span class="small-price">${{ listing.price }}</span>
+                                <span class="small-quality">{{ listing.quality }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a routerLink="/new-listings" class="view-all-stories">
+                        <i class="fas fa-arrow-right"></i>
+                        <span>Explore All Stories</span>
+                    </a>
+                </div>
+
+            </div>
+
+            <!-- Loading State -->
+            <div class="magazine-loading" *ngIf="isLoading">
+                <div class="loading-stories">
+                    <div class="loading-story" *ngFor="let item of [1,2,3,4]"></div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Quality Explorer: Interactive Categories -->
+    <section class="quality-explorer">
+        <div class="container">
+
+            <div class="explorer-header">
+                <h2>Explore by Character</h2>
+                <p>Every quality level has its own personality and story to tell</p>
+            </div>
+
+            <div class="quality-journey">
+                <div class="journey-path">
+
+                    <div class="path-line"></div>
+
+                    <div class="quality-station"
+                         *ngFor="let quality of qualities; let i = index"
+                         [class.active]="activeQuality === quality.value"
+                         (click)="setActiveQuality(quality.value)"> 
+
+                        <div class="station-marker">
+                            <div class="marker-inner">
+                                <i [class]="getQualityIcon(quality.value)"></i>
+                            </div>
+                        </div>
+
+                        <div class="station-content">
+                            <h3>{{ quality.label }}</h3>
+                            <p>{{ getQualityDescription(quality.value) }}</p>
+                            <span class="station-count">{{ getQualityCount(quality.value) }} items</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Recent Arrivals: Stream Layout -->
+    <section class="arrivals-stream">
+        <div class="container">
+
+            <div class="stream-header">
+                <h2>Latest Arrivals</h2>
+                <p>Fresh stories just added to our community</p>
+            </div>
+
+            <div class="stream-content" *ngIf="!isLoading">
+
+                <!-- Stream Items -->
+                <div class="stream-item"
+                     *ngFor="let listing of recentListings; let i = index"
+                     [class]="getStreamItemClass(i)"
+                     (click)="viewListingDetails(listing.id)"
+                     [style.animation-delay]="(i * 0.1) + 's'">
+
+                    <div class="stream-image">
+                        <img [src]="getImageUrl(listing.mainPhotoUrl)" [alt]="listing.title">
+                        <div class="stream-overlay">
+                            <div class="arrival-badge">
+                                <i class="fas fa-clock"></i>
+                                <span>{{ getTimeAgo(listing.createdAt) }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stream-info">
+                        <div class="stream-meta">
+                            <span class="stream-quality" [ngClass]="getQualityClass(listing.quality)">
+                                {{ listing.quality }}
+                            </span>
+                            <span class="stream-size">{{ listing.measurement }}</span>
+                        </div>
+
+                        <h4 class="stream-title">{{ listing.title }}</h4>
+
+                        <div class="stream-footer">
+                            <span class="stream-price">${{ listing.price }}</span>
+                            <div class="stream-seller">
+                                <span class="seller-avatar">{{ listing.userName.charAt(0) }}</span>
+                                <span class="seller-name">{{ listing.userName }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Stream Navigation -->
+            <div class="stream-navigation">
+                <a routerLink="/new-listings" class="stream-cta">
+                    <div class="cta-content">
+                        <i class="fas fa-compass"></i>
+                        <span class="cta-text">Discover More Stories</span>
+                        <span class="cta-subtitle">{{ getTotalListingsCount() }}+ items waiting to be discovered</span>
+                    </div>
+                    <i class="fas fa-arrow-right cta-arrow"></i>
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+</div>

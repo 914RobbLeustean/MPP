@@ -42,7 +42,6 @@ namespace ThriftoServer.Services
                     InputStream = file.OpenReadStream(),
                     ContentType = file.ContentType,
                     ServerSideEncryptionMethod = ServerSideEncryptionMethod.AES256,
-                    CannedACL = S3CannedACL.PublicRead
                 };
 
                 var response = await _s3Client.PutObjectAsync(request);

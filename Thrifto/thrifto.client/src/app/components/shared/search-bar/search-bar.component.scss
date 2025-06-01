@@ -1,0 +1,476 @@
+﻿/* src/app/components/shared/search-bar/search-bar.component.scss */
+
+// Design system variables
+$teal-primary: #14b8a6;
+$teal-secondary: #0f766e;
+$text-primary: #1a202c;
+$text-secondary: #4a5568;
+$text-muted: #718096;
+$bg-light: #f8fafc;
+$bg-medium: #e2e8f0;
+
+.search-container {
+    position: relative;
+    display: flex;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+
+    .search-input-wrapper {
+        position: relative;
+        flex: 1;
+        display: flex;
+        align-items: center;
+        background: white;
+        border-radius: 25px 0 0 25px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+
+        &:focus-within {
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            border-color: $teal-primary;
+        }
+
+        .search-icon-left {
+            position: absolute;
+            left: 1.25rem; // ✅ FIXED: Proper spacing from edge
+            top: 50%; // ✅ ADDED: Missing top positioning
+            transform: translateY(-50%); // ✅ Perfect vertical centering
+            z-index: 2;
+            color: $text-muted;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 1.25rem;
+            height: 1.25rem;
+
+            i {
+                font-size: 1rem;
+            }
+        }
+
+        .search-input {
+            flex: 1;
+            border: none;
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 400;
+            color: $text-primary;
+            background: transparent;
+            outline: none;
+            transition: all 0.3s ease;
+
+            &.has-left-icon {
+                padding-left: 4.25rem; // ✅ INCREASED: More space to prevent overlap
+            }
+
+            &.has-right-icon {
+                padding-right: 3.5rem;
+            }
+
+            &::placeholder {
+                color: $text-muted;
+                font-weight: 400;
+            }
+
+            &:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+            }
+        }
+
+        .clear-button {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: $text-muted;
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 1.5rem;
+            height: 1.5rem;
+            transition: all 0.3s ease;
+            z-index: 3; // ✅ Above icon
+
+            &:hover {
+                background: $bg-medium;
+                color: $text-secondary;
+            }
+
+            i {
+                font-size: 0.75rem;
+            }
+        }
+
+        .loading-indicator {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: $teal-primary;
+            z-index: 3; // ✅ Above icon
+
+            i {
+                font-size: 1rem;
+            }
+        }
+    }
+
+    .search-button {
+        background: linear-gradient(135deg, $teal-primary 0%, $teal-secondary 100%);
+        color: white;
+        border: none;
+        border-radius: 0 25px 25px 0;
+        padding: 0 2rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        min-width: 60px;
+
+        &:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba($teal-primary, 0.3);
+        }
+
+        &:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .button-content {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+
+            i {
+                font-size: 1rem;
+            }
+
+            .button-text {
+                font-size: 0.9rem;
+                font-weight: 600;
+            }
+        }
+    }
+
+    .search-suggestions {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        z-index: 9999; // Very high z-index
+        margin-top: 0.5rem;
+        max-height: 300px;
+        overflow-y: auto;
+        border: 1px solid $bg-medium;
+        // Enhanced backdrop for better visibility
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        // Ensure it appears above everything in any context
+        isolation: isolate;
+        // Add subtle animation
+        animation: dropdownFadeIn 0.2s ease-out;
+        transform-origin: top center;
+
+        .suggestions-header {
+            padding: 0.75rem 1rem;
+            background: $bg-light;
+            border-bottom: 1px solid $bg-medium;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: $text-secondary;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .suggestion-item {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.3s ease;
+            text-align: left;
+
+            &:hover {
+                background: $bg-light;
+            }
+
+            &:focus {
+                outline: none;
+                background: $bg-light;
+                box-shadow: inset 3px 0 0 $teal-primary;
+            }
+
+            .suggestion-icon {
+                color: $text-muted;
+                font-size: 0.875rem;
+                flex-shrink: 0;
+            }
+
+            .suggestion-text {
+                flex: 1;
+                color: $text-primary;
+                font-weight: 400;
+            }
+
+            .suggestion-action {
+                color: $text-muted;
+                font-size: 0.75rem;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+            }
+
+            &:hover .suggestion-action {
+                opacity: 1;
+            }
+        }
+    }
+}
+
+// Theme variations
+.search-container.theme-blue {
+    .search-input-wrapper:focus-within {
+        border-color: #3b82f6;
+    }
+
+    .search-button {
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+
+        &:hover:not(:disabled) {
+            box-shadow: 0 6px 25px rgba(#3b82f6, 0.3);
+        }
+    }
+
+    .loading-indicator {
+        color: #3b82f6;
+    }
+}
+
+.search-container.theme-green {
+    .search-input-wrapper:focus-within {
+        border-color: #10b981;
+    }
+
+    .search-button {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+
+        &:hover:not(:disabled) {
+            box-shadow: 0 6px 25px rgba(#10b981, 0.3);
+        }
+    }
+
+    .loading-indicator {
+        color: #10b981;
+    }
+}
+
+.search-container.theme-purple {
+    .search-input-wrapper:focus-within {
+        border-color: #8b5cf6;
+    }
+
+    .search-button {
+        background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+
+        &:hover:not(:disabled) {
+            box-shadow: 0 6px 25px rgba(#8b5cf6, 0.3);
+        }
+    }
+
+    .loading-indicator {
+        color: #8b5cf6;
+    }
+}
+
+// Size variations
+.search-container.size-small {
+    max-width: 400px;
+
+    .search-input-wrapper .search-input {
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+
+        &.has-left-icon {
+            padding-left: 3.75rem; // ✅ Adjusted for small size
+        }
+    }
+
+    .search-button {
+        padding: 0 1.5rem;
+        min-width: 50px;
+    }
+}
+
+.search-container.size-large {
+    max-width: 800px;
+
+    .search-input-wrapper .search-input {
+        padding: 1.25rem 1.5rem;
+        font-size: 1.1rem;
+
+        &.has-left-icon {
+            padding-left: 4.75rem; // ✅ Adjusted for large size
+        }
+    }
+
+    .search-button {
+        padding: 0 2.5rem;
+        min-width: 80px;
+    }
+}
+
+// Keyframe for smooth dropdown appearance
+@keyframes dropdownFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+// Enhanced mobile handling
+@media (max-width: 768px) {
+    .search-suggestions {
+        position: fixed; // Use fixed positioning on mobile
+        left: 1rem;
+        right: 1rem;
+        top: auto;
+        max-height: 60vh; // Limit height on mobile
+        // Position below the search bar
+        margin-top: 1rem;
+    }
+}
+
+// Handle when search bar is in a hero section
+.search-container {
+    &.in-hero {
+        .search-suggestions {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+    }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+    .search-container {
+        max-width: 100%;
+
+        .search-input-wrapper .search-input {
+            font-size: 16px; // Prevent zoom on iOS
+
+            &.has-left-icon {
+                padding-left: 4rem; // ✅ Mobile spacing
+            }
+        }
+
+        .search-button {
+            padding: 0 1.5rem;
+            min-width: 50px;
+
+            .button-text {
+                display: none; // Hide text on mobile
+            }
+        }
+
+        .search-suggestions {
+            left: -1rem;
+            right: -1rem;
+            margin-top: 0.25rem;
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .search-container {
+        .search-input-wrapper {
+            border-radius: 20px 0 0 20px;
+
+            .search-input {
+                padding: 0.875rem 1rem;
+
+                &.has-left-icon {
+                    padding-left: 3.5rem; // ✅ Small mobile spacing
+                }
+            }
+        }
+
+        .search-button {
+            border-radius: 0 20px 20px 0;
+            padding: 0 1rem;
+            min-width: 45px;
+        }
+    }
+}
+
+// Animation keyframes
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+// Focus and accessibility improvements
+.search-container {
+    &:focus-within {
+        .search-suggestions {
+            display: block;
+        }
+    }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+    .search-container {
+        .search-input-wrapper {
+            border: 2px solid $text-primary;
+        }
+
+        .search-button {
+            border: 2px solid $text-primary;
+        }
+    }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+    .search-container * {
+        transition: none;
+        animation: none;
+    }
+}

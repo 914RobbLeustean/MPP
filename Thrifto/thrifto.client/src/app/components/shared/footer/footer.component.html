@@ -1,0 +1,105 @@
+<!-- src/app/components/shared/footer/footer.component.html -->
+<footer class="footer">
+
+    <div class="footer-content">
+        <div class="container">
+            <div class="footer-grid">
+                <!-- Brand Section -->
+                <div class="footer-brand">
+                    <div class="brand-header">
+                        <div class="brand-icon">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                        <h2>Thrifto</h2>
+                    </div>
+                    <p class="brand-description">The sustainable marketplace for pre-loved clothing. Give fashion a second life.</p>
+
+                    <div class="social-links">
+                        <a href="#" class="social-link" aria-label="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-link" aria-label="TikTok">
+                            <i class="fab fa-tiktok"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="footer-section">
+                    <h3>Shop</h3>
+                    <ul class="footer-links">
+                        <li><a [routerLink]="['/new-listings']">All Items</a></li>
+                        <li><a [routerLink]="['/new-listings']" [queryParams]="{sort: 'newest'}">New Arrivals</a></li>
+                        <li><a [routerLink]="['/new-listings']" [queryParams]="{sort: 'price_asc'}">Budget Finds</a></li>
+                        <li><a [routerLink]="['/sell']">Sell Your Items</a></li>
+                    </ul>
+                </div>
+
+                <!-- Company Links -->
+                <div class="footer-section">
+                    <h3>Company</h3>
+                    <ul class="footer-links">
+                        <li><a routerLink="/about">About Us</a></li>
+                        <li><a routerLink="/blog">Blog</a></li>
+                        <li><a routerLink="/faq">FAQs</a></li>
+                        <li><a routerLink="/contact">Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <!-- Support Links -->
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul class="footer-links">
+                        <li><a routerLink="/shipping-policy">Shipping Policy</a></li>
+                        <li><a routerLink="/return-policy">Return Policy</a></li>
+                        <li><a routerLink="/privacy-policy">Privacy Policy</a></li>
+                        <li><a routerLink="/terms-of-service">Terms of Service</a></li>
+                        <!-- ADD: Security help link -->
+                        <li><a routerLink="/security-help">Security Help</a></li>
+                    </ul>
+                </div>
+
+                <!-- Newsletter -->
+                <div class="footer-newsletter">
+                    <h3>Stay Updated</h3>
+                    <p>Get the latest sustainable fashion tips and deals.</p>
+
+                    <form class="newsletter-form" (ngSubmit)="onNewsletterSubmit()" #newsletterForm="ngForm">
+                        <div class="input-group">
+                            <input type="email"
+                                   name="email"
+                                   [(ngModel)]="newsletterEmail"
+                                   placeholder="Enter your email"
+                                   required
+                                   #emailInput="ngModel">
+                            <button type="submit" class="subscribe-btn" [disabled]="newsletterForm.invalid">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Footer Bottom -->
+            <div class="footer-bottom">
+                <div class="copyright">
+                    <p>&copy; {{ currentYear }} Thrifto. All rights reserved.</p>
+                </div>
+
+                <div class="footer-bottom-links">
+                    <a routerLink="/privacy-policy">Privacy</a>
+                    <a routerLink="/terms-of-service">Terms</a>
+                    <a routerLink="/contact">Support</a>
+                    <!-- ADD: Security link -->
+                    <a routerLink="/security-help">Security</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>

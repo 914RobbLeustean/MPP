@@ -1,0 +1,283 @@
+<!-- src/app/components/account-settings/account-settings.component.html -->
+<div class="account-settings-container">
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-background"></div>
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-icon">
+                    <i class="fas fa-user-shield" aria-hidden="true"></i>
+                </div>
+                <h1>Account Settings</h1>
+                <p>Manage your profile and security settings to keep your Thrifto account safe and up to date.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="content-section">
+        <div class="container">
+            <div class="content-grid">
+
+                <!-- Profile Information Card -->
+                <div class="settings-card profile-card" *ngIf="currentUser">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-user" aria-hidden="true"></i>
+                        </div>
+                        <div class="card-title">
+                            <h3>Profile Information</h3>
+                            <p>Your basic account details</p>
+                        </div>
+                    </div>
+
+                    <div class="profile-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Full Name</span>
+                            <span class="detail-value">{{ currentUser.firstName }} {{ currentUser.lastName }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Username</span>
+                            <span class="detail-value">{{ currentUser.username }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Email Address</span>
+                            <span class="detail-value">{{ currentUser.email }}</span>
+                        </div>
+                    </div>
+
+                    <div class="card-actions">
+                        <button class="btn btn-outline">Edit Profile</button>
+                    </div>
+                </div>
+
+                <!-- Two-Factor Authentication Card -->
+                <div class="settings-card security-card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-shield-check" aria-hidden="true"></i>
+                        </div>
+                        <div class="card-title">
+                            <h3>Two-Factor Authentication</h3>
+                            <p>Add an extra layer of security to your account</p>
+                        </div>
+                    </div>
+
+                    <!-- Loading State -->
+                    <div *ngIf="isLoading" class="loading-state">
+                        <div class="spinner-container">
+                            <div class="spinner"></div>
+                        </div>
+                        <p>Loading security settings...</p>
+                    </div>
+
+                    <!-- 2FA Status Display -->
+                    <div *ngIf="!isLoading && !showSetupForm && !showRecoveryCodes" class="security-status">
+                        <div class="status-display">
+                            <div class="status-indicator" [ngClass]="twoFactorEnabled ? 'enabled' : 'disabled'">
+                                <i class="fas" [ngClass]="twoFactorEnabled ? 'fa-check-circle' : 'fa-exclamation-triangle'" aria-hidden="true"></i>
+                                <span class="status-text">{{ twoFactorEnabled ? 'Enabled' : 'Disabled' }}</span>
+                            </div>
+
+                            <div class="status-description">
+                                <p *ngIf="twoFactorEnabled" class="enabled-text">
+                                    <i class="fas fa-shield-check" aria-hidden="true"></i>
+                                    Your account is protected with two-factor authentication. Well done!
+                                </p>
+                                <p *ngIf="!twoFactorEnabled" class="disabled-text">
+                                    <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
+                                    Secure your account by enabling two-factor authentication.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="status-actions">
+                            <button *ngIf="!twoFactorEnabled"
+                                    class="btn btn-primary"
+                                    (click)="startTwoFactorSetup()"
+                                    [disabled]="isSubmitting">
+                                <span *ngIf="isSubmitting" class="spinner-sm"></span>
+                                <i class="fas fa-plus" aria-hidden="true"></i>
+                                Enable 2FA
+                            </button>
+
+                            <button *ngIf="twoFactorEnabled"
+                                    class="btn btn-danger"
+                                    (click)="disableTwoFactor()"
+                                    [disabled]="isSubmitting">
+                                <span *ngIf="isSubmitting" class="spinner-sm"></span>
+                                <i class="fas fa-times" aria-hidden="true"></i>
+                                Disable 2FA
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 2FA Setup Process -->
+                    <div *ngIf="showSetupForm && setupData" class="setup-process">
+                        <div class="setup-header">
+                            <h4>
+                                <i class="fas fa-shield" aria-hidden="true"></i>
+                                Set up Two-Factor Authentication
+                            </h4>
+                            <p>Follow these steps to secure your account</p>
+                        </div>
+
+                        <div class="setup-steps">
+                            <!-- Step 1: QR Code -->
+                            <div class="setup-step active">
+                                <div class="step-number">
+                                    <span>1</span>
+                                </div>
+                                <div class="step-content">
+                                    <h5>
+                                        <i class="fas fa-qrcode" aria-hidden="true"></i>
+                                        Scan QR Code
+                                    </h5>
+                                    <p>Use your authenticator app (Google Authenticator, Authy, etc.) to scan this code:</p>
+
+                                    <div class="qr-code-container">
+                                        <div class="qr-code">
+                                            <img [src]="'data:image/png;base64,' + setupData.qrCode"
+                                                 alt="Two-factor authentication QR code"
+                                                 loading="lazy" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step 2: Manual Entry -->
+                            <div class="setup-step">
+                                <div class="step-number">
+                                    <span>2</span>
+                                </div>
+                                <div class="step-content">
+                                    <h5>
+                                        <i class="fas fa-key" aria-hidden="true"></i>
+                                        Manual Entry (Alternative)
+                                    </h5>
+                                    <p>Can't scan? Enter this key manually in your authenticator app:</p>
+
+                                    <div class="manual-key-container">
+                                        <div class="manual-key">
+                                            <code>{{ setupData.manualEntryKey }}</code>
+                                            <button class="copy-btn" (click)="copyManualKey()" title="Copy to clipboard">
+                                                <i class="fas fa-copy" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step 3: Verification -->
+                            <div class="setup-step active">
+                                <div class="step-number">
+                                    <span>3</span>
+                                </div>
+                                <div class="step-content">
+                                    <h5>
+                                        <i class="fas fa-mobile-alt" aria-hidden="true"></i>
+                                        Verify Setup
+                                    </h5>
+                                    <p>Enter the 6-digit code from your authenticator app:</p>
+
+                                    <form [formGroup]="setupForm" (ngSubmit)="enableTwoFactor()" class="verification-form">
+                                        <div class="form-group">
+                                            <div class="code-input-container">
+                                                <input type="text"
+                                                       formControlName="code"
+                                                       class="code-input"
+                                                       [ngClass]="{ 'is-invalid': f['code'].touched && f['code'].errors }"
+                                                       placeholder="000000"
+                                                       maxlength="6"
+                                                       autocomplete="one-time-code">
+                                                <div *ngIf="f['code'].touched && f['code'].errors" class="error-message">
+                                                    <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
+                                                    <span *ngIf="f['code'].errors['required']">Verification code is required</span>
+                                                    <span *ngIf="f['code'].errors['pattern']">Please enter a valid 6-digit code</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-actions">
+                                            <button type="button" class="btn btn-secondary" (click)="cancelSetup()">
+                                                <i class="fas fa-times" aria-hidden="true"></i>
+                                                Cancel
+                                            </button>
+                                            <button type="submit"
+                                                    class="btn btn-primary"
+                                                    [disabled]="setupForm.invalid || isSubmitting">
+                                                <span *ngIf="isSubmitting" class="spinner-sm"></span>
+                                                <i class="fas fa-check" aria-hidden="true"></i>
+                                                Enable 2FA
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recovery Codes Modal -->
+    <div *ngIf="showRecoveryCodes" class="modal-overlay" (click)="$event.target === $event.currentTarget && acknowledgeRecoveryCodes()">
+        <div class="recovery-modal">
+            <div class="modal-header">
+                <div class="modal-icon">
+                    <i class="fas fa-key" aria-hidden="true"></i>
+                </div>
+                <h4>Save Your Recovery Codes</h4>
+                <p>These backup codes can restore access to your account if you lose your authenticator device.</p>
+            </div>
+
+            <div class="recovery-codes-container">
+                <div class="codes-grid">
+                    <div *ngFor="let code of recoveryCodes" class="recovery-code">
+                        {{ code }}
+                    </div>
+                </div>
+
+                <div class="codes-warning">
+                    <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
+                    <span>Store these codes securely - they won't be shown again!</span>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn btn-outline" (click)="downloadRecoveryCodes()">
+                    <i class="fas fa-download" aria-hidden="true"></i>
+                    Download
+                </button>
+                <button class="btn btn-outline" (click)="copyRecoveryCodes()">
+                    <i class="fas fa-copy" aria-hidden="true"></i>
+                    Copy All
+                </button>
+                <button class="btn btn-primary" (click)="acknowledgeRecoveryCodes()">
+                    <i class="fas fa-check" aria-hidden="true"></i>
+                    I've Saved These
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call-to-Action Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h3>Keep Your Account Secure</h3>
+                <p>Your security is our priority. Enable two-factor authentication and keep your profile updated.</p>
+                <div class="cta-buttons">
+                    <a href="/security-center" class="btn btn-primary">
+                        <i class="fas fa-shield-check" aria-hidden="true"></i>
+                        Security Center
+                    </a>
+                    <a href="/security-help" class="btn btn-outline">
+                        <i class="fas fa-question-circle" aria-hidden="true"></i>
+                        Security Help
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>

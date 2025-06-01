@@ -1,0 +1,405 @@
+﻿<div class="marketplace-container">
+    <section class="discovery-hero">
+        <div class="hero-background">
+            <div class="sustainability-particles">
+                <div class="particle" *ngFor="let particle of sustainabilityParticles; let i = index"
+                     [style.animation-delay]="(i * 0.3) + 's'">
+                    <i [class]="particle.icon"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="price-filter-section">
+                <div class="floating-price-filter" [class.expanded]="isPriceFilterExpanded">
+                    <button class="price-filter-toggle" (click)="togglePriceFilter()"
+                            [attr.aria-label]="isPriceFilterExpanded ? 'Close price filter' : 'Open price filter'">
+                        <div class="toggle-icon">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="toggle-label" *ngIf="!isPriceFilterExpanded">
+                            <span class="filter-text">Price</span>
+                            <span class="filter-range" *ngIf="hasActivePriceFilter">
+                                ${{ priceRange.min }}-${{ priceRange.max }}
+                            </span>
+                        </div>
+                        <div class="toggle-arrow">
+                            <i class="fas" [class.fa-chevron-up]="isPriceFilterExpanded"
+                               [class.fa-chevron-down]="!isPriceFilterExpanded"></i>
+                        </div>
+                    </button>
+                    <div class="price-filter-panel" *ngIf="isPriceFilterExpanded" [@slideDown]>
+                        <div class="panel-header">
+                            <h4>Price Range Filter</h4>
+                            <button class="close-btn" (click)="togglePriceFilter()">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+
+                        <div class="compact-price-filter">
+                            <app-price-range-filter [initialMin]="priceRange.min" [initialMax]="priceRange.max"
+                                                    [absoluteMin]="0" [absoluteMax]="10000" [theme]="'green'" [showPresets]="true"
+                                                    (priceRangeChange)="onPriceRangeChange($event)"
+                                                    (filterReset)="onPriceFilterReset()">
+                            </app-price-range-filter>
+                        </div>
+                    </div>
+                    <div class="filter-backdrop" *ngIf="isPriceFilterExpanded" (click)="togglePriceFilter()"></div>
+                </div>
+            </div>
+
+            <div class="hero-content">
+                <div class="hero-icon">
+                    <i class="fas fa-compass"></i>
+                </div>
+                <h1>Marketplace Discovery</h1>
+                <p>Explore {{ totalItemsCount }}+ sustainable fashion pieces waiting for their next adventure</p>
+
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">{{ getActiveFiltersCount() }}</span>
+                        <span class="stat-label">Active Filters</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">{{ listings.length }}</span>
+                        <span class="stat-label">Items Found</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">{{ calculateSustainabilityScore() }}%</span>
+                        <span class="stat-label">Sustainability Score</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="filter-hub">
+        <div class="container">
+            <div class="hub-content">
+
+                <div class="smart-search-area">
+                    <div class="search-wrapper">
+                        <app-search-bar [liveUpdate]="false" [theme]="'green'" [size]="'large'"
+                                        [showSearchIcon]="true" [showButtonText]="true" buttonText="Discover"
+                                        placeholder="Search by brand, style, color, or story..." (searchQuery)="onSearch($event)">
+                        </app-search-bar>
+                    </div>
+
+                    <div class="quick-search-tags" *ngIf="!hasActiveFilters">
+                        <span class="tag-label">Popular:</span>
+                        <button class="search-tag" *ngFor="let tag of popularTags" (click)="searchByTag(tag)">
+                            {{ tag }}
+                        </button>
+                    </div>
+                </div>
+
+                <div class="filter-controls">
+
+                    <div class="primary-filters">
+                        <div class="filter-group quality-filter">
+                            <label class="filter-label">
+                                <i class="fas fa-gem"></i>
+                                Quality Story
+                            </label>
+                            <div class="quality-selector">
+                                <button class="quality-option" *ngFor="let quality of qualities"
+                                        [class.active]="selectedQuality === quality.value"
+                                        [class.highlighted]="hoveredQuality === quality.value"
+                                        (click)="selectQuality(quality.value)" (mouseenter)="hoveredQuality = quality.value"
+                                        (mouseleave)="hoveredQuality = ''">
+                                    <div class="quality-icon">
+                                        <i [class]="getQualityIcon(quality.value)"></i>
+                                    </div>
+                                    <span class="quality-label">{{ quality.label }}</span>
+                                    <span class="quality-count">{{ getQualityCount(quality.value) }}</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="filter-group sort-filter">
+                            <label class="filter-label">
+                                <i class="fas fa-sort-amount-down"></i>
+                                Sort & View
+                            </label>
+                            <div class="sort-controls">
+                                <select [(ngModel)]="sortBy" (change)="onSortChange()" class="sort-select">
+                                    <option value="newest">Latest Arrivals</option>
+                                    <option value="price_asc">Budget Friendly</option>
+                                    <option value="price_desc">Premium First</option>
+                                    <option value="popularity">Most Loved</option>
+                                    <option value="sustainability">Eco Impact</option>
+                                </select>
+
+                                <div class="view-controls">
+                                    <button class="view-btn" [class.active]="viewMode === 'grid'"
+                                            (click)="setViewMode('grid')" title="Grid View">
+                                        <i class="fas fa-th"></i>
+                                    </button>
+                                    <button class="view-btn" [class.active]="viewMode === 'list'"
+                                            (click)="setViewMode('list')" title="List View">
+                                        <i class="fas fa-list"></i>
+                                    </button>
+                                    <button class="view-btn" [class.active]="viewMode === 'magazine'"
+                                            (click)="setViewMode('magazine')" title="Magazine View">
+                                        <i class="fas fa-newspaper"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="active-filters" *ngIf="hasActiveFilters">
+                        <div class="filters-header">
+                            <span class="filters-title">Active Filters:</span>
+                            <button class="clear-all-btn" (click)="clearAllFilters()">
+                                <i class="fas fa-times"></i>
+                                Clear All
+                            </button>
+                        </div>
+                        <div class="filter-tags">
+                            <span class="filter-tag" *ngFor="let filter of getActiveFilters()">
+                                {{ filter }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="results-section">
+        <div class="container">
+
+            <div class="results-header" *ngIf="!isLoading || listings.length > 0">
+                <div class="results-info">
+                    <h2>{{ getResultsTitle() }}</h2>
+                    <p class="results-subtitle" *ngIf="listings.length > 0">
+                        Found {{ listings.length }} {{ listings.length === 1 ? 'treasure' : 'treasures' }}
+                        <span *ngIf="hasActiveFilters">matching your filters</span>
+                    </p>
+                </div>
+
+                <div class="results-actions" *ngIf="listings.length > 0">
+                    <button class="action-btn favorite-btn" [class.active]="showFavoritesOnly"
+                            (click)="toggleFavoritesOnly()" title="Show Favorites Only">
+                        <i class="fas fa-heart"></i>
+                        <span *ngIf="showFavoritesOnly">Favorites</span>
+                    </button>
+
+                    <button class="action-btn shuffle-btn" (click)="shuffleResults()" title="Go to Random Listing">
+                        <i class="fas fa-random"></i>
+                        <span>Surprise Me</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="no-results-state" *ngIf="!isLoading && listings.length === 0">
+                <div class="no-results-content">
+                    <div class="no-results-icon">
+                        <i class="fas fa-search-minus"></i>
+                    </div>
+                    <h3>No treasures found</h3>
+                    <p>Don't worry! Try adjusting your filters or explore our suggestions.</p>
+
+                    <div class="no-results-actions">
+                        <button class="btn-primary" (click)="clearAllFilters()">
+                            <i class="fas fa-filter"></i>
+                            Clear All Filters
+                        </button>
+                        <button class="btn-secondary" (click)="exploreRecommendations()">
+                            <i class="fas fa-magic"></i>
+                            Show Recommendations
+                        </button>
+                    </div>
+
+                    <div class="alternative-searches" *ngIf="alternativeSearches.length > 0">
+                        <h4>Try these instead:</h4>
+                        <div class="alternative-tags">
+                            <button class="alt-tag" *ngFor="let search of alternativeSearches"
+                                    (click)="searchByTag(search)">
+                                {{ search }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="listings-display" *ngIf="listings.length > 0 && !isLoading">
+
+                <div class="listings-grid" *ngIf="viewMode === 'grid'" [class.compact]="isCompactMode">
+                    <div class="listing-card grid-card"
+                         *ngFor="let listing of listings; trackBy: trackByListingId; let i = index"
+                         [style.animation-delay]="(i * 0.05) + 's'" (click)="viewListingDetails(listing.id)"
+                         (mouseenter)="onListingHover(listing)" (mouseleave)="onListingLeave()">
+                        <app-listing-item [listing]="listing"></app-listing-item>
+
+                        <div class="quick-actions">
+                            <button class="quick-action favorite" [class.active]="isFavorite(listing.id)"
+                                    (click)="toggleFavorite(listing.id, $event)" title="Add to Favorites">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                            <button class="quick-action share" (click)="shareItem(listing, $event)" title="Share Item">
+                                <i class="fas fa-share-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="listings-list" *ngIf="viewMode === 'list'">
+                    <div class="list-item"
+                         *ngFor="let listing of listings; trackBy: trackByListingId; let i = index"
+                         [style.animation-delay]="(i * 0.03) + 's'" (click)="viewListingDetails(listing.id)">
+
+                        <div class="list-image">
+                            <img [src]="getImageUrl(listing.mainPhotoUrl)" [alt]="listing.title">
+                        </div>
+
+                        <div class="list-content">
+                            <div class="list-header">
+                                <h3 class="list-title">{{ listing.title }}</h3>
+                                <span class="list-price">${{ listing.price }}</span>
+                            </div>
+
+                            <div class="list-meta">
+                                <span class="quality-badge" [ngClass]="getQualityClass(listing.quality)">
+                                    {{ listing.quality }}
+                                </span>
+                                <span class="size-info">{{ listing.measurement }}</span>
+                                <span class="time-info">{{ getTimeAgo(listing.createdAt) }}</span>
+                            </div>
+
+                            <p class="list-description">{{ getListingPreview(listing) }}</p>
+
+                            <div class="list-footer">
+                                <div class="seller-info">
+                                    <span class="seller-avatar">{{ listing.userName.charAt(0) }}</span>
+                                    <span class="seller-name">{{ listing.userName }}</span>
+                                </div>
+
+                                <div class="list-actions">
+                                    <button class="list-action" [class.active]="isFavorite(listing.id)"
+                                            (click)="toggleFavorite(listing.id, $event)">
+                                        <i class="fas fa-heart"></i>
+                                    </button>
+                                    <button class="list-action" (click)="shareItem(listing, $event)">
+                                        <i class="fas fa-share-alt"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="listings-magazine" *ngIf="viewMode === 'magazine'">
+                    <div class="magazine-container">
+
+                        <div class="magazine-header">
+                            <h3>Featured Collection</h3>
+                            <p>Curated sustainable fashion stories</p>
+                        </div>
+
+                        <div class="magazine-masonry">
+                            <div class="magazine-column"
+                                 *ngFor="let column of getMagazineColumns(); let colIndex = index">
+                                <div class="magazine-item"
+                                     *ngFor="let listing of column; trackBy: trackByListingId; let i = index"
+                                     [style.animation-delay]="((colIndex * column.length + i) * 0.1) + 's'"
+                                     (click)="viewListingDetails(listing.id)">
+
+                                    <div class="magazine-card-wrapper">
+                                        <div class="magazine-image"
+                                             [style.height]="getMagazineItemHeight(colIndex, i)">
+                                            <img [src]="getImageUrl(listing.mainPhotoUrl)" [alt]="listing.title">
+
+                                            <div class="magazine-overlay">
+                                                <div class="magazine-badges">
+                                                    <span class="magazine-quality"
+                                                          [ngClass]="getQualityClass(listing.quality)">
+                                                        {{ listing.quality }}
+                                                    </span>
+                                                    <span class="magazine-price">${{ listing.price }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="magazine-info">
+                                            <h4 class="magazine-title">{{ listing.title }}</h4>
+                                            <div class="magazine-meta">
+                                                <span class="magazine-seller">
+                                                    <i class="fas fa-user-circle"></i>
+                                                    {{ listing.userName }}
+                                                </span>
+                                                <span class="magazine-time">{{ getTimeAgo(listing.createdAt) }}</span>
+                                            </div>
+                                            <p class="magazine-description" *ngIf="shouldShowDescription(colIndex, i)">
+                                                {{ getStoryExcerpt(listing) }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="loading-section" *ngIf="isLoading && listings.length === 0">
+                <div class="loading-content">
+                    <div class="loading-animation">
+                        <div class="loading-item" *ngFor="let item of [1,2,3,4,5,6]"></div>
+                    </div>
+                    <h3>Discovering Treasures...</h3>
+                    <p>We're finding the perfect sustainable pieces for you</p>
+                </div>
+            </div>
+
+            <div class="load-more-section" *ngIf="listings.length > 0">
+
+                <div class="load-more-content" *ngIf="paginationService.hasMoreItems && !isLoading">
+                    <button class="load-more-btn" (click)="loadMoreManually()"
+                            [disabled]="!paginationService.hasMoreItems || isLoading">
+                        <div class="btn-content">
+                            <i class="fas fa-plus-circle"></i>
+                            <span class="btn-text">Discover More Treasures</span>
+                            <span class="btn-subtitle">
+                                {{ paginationService.remainingItems }} more of {{ paginationService.totalCount }} total
+                                items
+                            </span>
+                        </div>
+                        <div class="btn-arrow">
+                            <i class="fas fa-arrow-down"></i>
+                        </div>
+                    </button>
+
+                    <div class="load-progress" *ngIf="paginationService.totalCount > 0">
+                        <div class="progress-bar">
+                            <div class="progress-fill" [style.width.%]="paginationService.progressPercentage">
+                            </div>
+                        </div>
+                        <span class="progress-text">
+                            {{ paginationService.getPaginationSummary() }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="loading-more" *ngIf="isLoading && listings.length > 0">
+                    <div class="loading-spinner">
+                        <i class="fas fa-compass fa-spin"></i>
+                    </div>
+                    <span>Loading more treasures...</span>
+                </div>
+
+                <div class="end-message" *ngIf="!paginationService.hasMoreItems && !isLoading && listings.length > 0">
+                    <div class="end-content">
+                        <i class="fas fa-check-circle"></i>
+                        <h4>You've discovered them all!</h4>
+                        <p>You've seen all {{ listings.length }} treasures in this collection.</p>
+                        <button class="btn-secondary" (click)="exploreMoreCategories()">
+                            <i class="fas fa-compass"></i>
+                            Explore More Categories
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
