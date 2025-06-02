@@ -68,3 +68,4 @@ uploads/
 # Git cache and objects
 .git/objects/
 .git/logs/
+\n# Angular cache\n.angular/cache
