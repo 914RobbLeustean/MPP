@@ -353,7 +353,7 @@ ng serve
 ## 🔮 Future Roadmap
 
 ### **Planned Enhancements**
-- **Machine Learning** product recommendations
+- **Machine Learning** product recommendations & AI Chat Support
 - **Blockchain** integration for authenticity verification
 - **Advanced Analytics** with business intelligence
 - **Multi-language** internationalization support
@@ -382,6 +382,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🤝 Contact & Collaboration
 
 **Project Maintainer**: Leustean Robert 
+
 **Email**: leustean.robertgeorge@gmail.com
 
 ---
