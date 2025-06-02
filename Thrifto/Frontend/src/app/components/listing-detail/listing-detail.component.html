@@ -1,0 +1,73 @@
+<!-- src/app/components/listing-detail/listing-detail.component.html -->
+<div class="container">
+  <div class="loading-spinner" *ngIf="isLoading"></div>
+
+  <div class="listing-detail" *ngIf="!isLoading && listing">
+    <div class="listing-gallery">
+      <div class="main-image">
+        <img [src]="getImageUrl(selectedImage)" [alt]="listing.title">
+      </div>
+
+      <div class="thumbnail-list" *ngIf="listing && listing.photoUrls && listing.photoUrls.length > 1">
+        <div *ngFor="let photo of listing.photoUrls"
+             class="thumbnail"
+             [class.active]="selectedImage === photo"
+             (click)="selectImage(photo)">
+          <img [src]="getImageUrl(photo)" alt="Thumbnail">
+        </div>
+      </div>
+    </div>
+
+    <div class="listing-info">
+      <h1>{{ listing.title }}</h1>
+      <p class="price">${{ listing.price }}</p>
+
+      <!-- Simple description section - Now with backend support -->
+      <div class="description">
+        <h3>Description</h3>
+        <p *ngIf="listing.description && listing.description.trim().length > 0">
+          {{ listing.description }}
+        </p>
+        <p *ngIf="!listing.description || listing.description.trim().length === 0" class="no-description">
+          No description available for this item.
+        </p>
+      </div>
+
+      <div class="info-item">
+        <span class="label">Measurement:</span>
+        <span class="value">{{ listing.measurement }}</span>
+      </div>
+
+      <div class="info-item">
+        <span class="label">Quality:</span>
+        <span class="value">{{ listing.quality }}</span>
+      </div>
+
+      <div class="info-item">
+        <span class="label">Seller:</span>
+        <span class="value">{{ listing.userName }}</span>
+      </div>
+
+      <div class="info-item">
+        <span class="label">Listed on:</span>
+        <span class="value">{{ listing.createdAt | date }}</span>
+      </div>
+      <div class="actions">
+
+        <button class="btn btn-primary add-to-cart" (click)="addToCart()">
+          Add to Cart
+        </button>
+      </div>
+
+      <button class="btn btn-secondary contact-seller" (click)="contactSeller()">
+        Contact Seller
+      </button>
+    </div>
+  </div>
+
+  <div class="not-found" *ngIf="!isLoading && !listing">
+    <h2>Listing Not Found</h2>
+    <p>The listing you're looking for doesn't exist or has been removed.</p>
+    <a routerLink="/" class="btn btn-primary">Back to Home</a>
+  </div>
+</div>

@@ -1,0 +1,64 @@
+<!-- src/app/components/new-listings/new-listings.component.html -->
+<div class="container">
+  <div class="listings-header">
+    <h1>Listings</h1>
+    <app-search-bar [liveUpdate]="false"
+                    (searchQuery)="onSearch($event)">
+    </app-search-bar>
+  </div>
+
+  <div class="filters-bar">
+    <div class="filter-group">
+      <label for="quality">Quality:</label>
+      <select id="quality" [(ngModel)]="selectedQuality" (change)="onQualityChange()">
+        <option value="">All</option>
+        <option *ngFor="let quality of qualities" [value]="quality.value">{{ quality.label }}</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label for="sortBy">Sort by:</label>
+      <select id="sortBy" [(ngModel)]="sortBy" (change)="onSortChange()">
+        <option value="newest">Newest</option>
+        <option value="price_asc">Price: Low to High</option>
+        <option value="price_desc">Price: High to Low</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="no-results" *ngIf="!isLoading && listings.length === 0">
+    <p>No listings found matching your criteria.</p>
+    <button class="btn btn-primary" (click)="clearFilters()">Clear filters</button>
+  </div>
+
+  <!-- The main listings section - apply the infinite scroll here -->
+  <div class="listings-wrapper" appInfiniteScroll [disabled]="isLoading" (scrolled)="onScroll()">
+    <div class="listings-grid" *ngIf="listings.length > 0">
+      <div class="listing-card" *ngFor="let listing of listings">
+        <app-listing-item [listing]="listing" (click)="viewListingDetails(listing.id)"></app-listing-item>
+      </div>
+    </div>
+  </div>
+
+  <div class="load-more-container" *ngIf="listings.length > 0 && paginationService.hasMoreItems && !isLoading">
+    <button class="load-more-btn" (click)="loadMoreManually()">
+      <span class="btn-text">Load More Listings</span>
+      <span class="btn-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+        </svg>
+      </span>
+    </button>
+  </div>
+
+  <!-- Loading indicator (show this when loading more) -->
+  <div class="infinite-scroll-loader" *ngIf="isLoading">
+    <div class="loading-spinner"></div>
+    <p>Loading more listings...</p>
+  </div>
+
+  <!-- End of results message -->
+  <div class="end-of-results" *ngIf="listings.length > 0 && !paginationService.hasMoreItems && !isLoading">
+    <p>You've reached the end of the listings</p>
+  </div>
+</div>

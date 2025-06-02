@@ -1,0 +1,83 @@
+<!-- src/app/components/chat/chat.component.html -->
+<div class="container">
+  <div class="chat-container">
+    <div class="conversations-sidebar">
+      <div class="sidebar-header">
+        <h2>Messages</h2>
+      </div>
+
+      <div class="loading-spinner" *ngIf="isLoadingConversations"></div>
+
+      <div class="no-conversations" *ngIf="!isLoadingConversations && conversations.length === 0">
+        <p>No conversations yet</p>
+      </div>
+
+      <div class="conversation-list" *ngIf="!isLoadingConversations && conversations.length > 0">
+        <div *ngFor="let conversation of conversations"
+             class="conversation-item"
+             [class.active]="activeConversation?.userId === conversation.userId"
+             (click)="selectConversation(conversation)">
+          <div class="user-avatar">
+            {{ conversation.username.charAt(0).toUpperCase() }}
+          </div>
+          <div class="conversation-info">
+            <div class="conversation-header">
+              <span class="username">{{ conversation.username }}</span>
+              <span class="time">{{ formatTime(conversation.lastMessageTimestamp) }}</span>
+            </div>
+            <div class="last-message">{{ conversation.lastMessage }}</div>
+          </div>
+          <div class="unread-badge" *ngIf="conversation.unreadCount > 0">
+            {{ conversation.unreadCount }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-main">
+      <div class="empty-state" *ngIf="!activeConversation">
+        <p>Select a conversation to start chatting</p>
+      </div>
+
+      <ng-container *ngIf="activeConversation">
+        <div class="chat-header">
+          <div class="user-avatar">
+            {{ activeConversation.username.charAt(0).toUpperCase() }}
+          </div>
+          <div class="user-info">
+            <div class="username">{{ activeConversation.username }}</div>
+          </div>
+        </div>
+
+        <div class="chat-messages" #messageContainer>
+          <div class="loading-spinner" *ngIf="isLoadingMessages"></div>
+
+          <div class="no-messages" *ngIf="!isLoadingMessages && messages.length === 0">
+            <p>No messages yet. Start the conversation!</p>
+          </div>
+
+          <div *ngFor="let message of messages"
+               class="message"
+               [class.outgoing]="message.isFromCurrentUser"
+               [class.incoming]="!message.isFromCurrentUser">
+            <div class="message-content">{{ message.content }}</div>
+            <div class="message-time">{{ formatTime(message.timestamp) }}</div>
+          </div>
+        </div>
+
+        <div class="chat-input">
+          <input type="text"
+                 placeholder="Type a message..."
+                 [(ngModel)]="newMessage"
+                 (keyup.enter)="sendMessage()">
+          <button class="send-btn" [disabled]="!newMessage.trim()" (click)="sendMessage()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+          </button>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

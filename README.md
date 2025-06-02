@@ -1,11 +1,12 @@
+<<<<<<< HEAD
 # 🛍️ Thrifto - Premium Sustainable Marketplace Platform
 
-[![Home Page](images/home.png)
-[![Home Page II](images/home2.png)
-[![Edit Listing](images/editlisting.png)
-[![2FA Authentification](images/2FA.png)
-[![Cart](images/cart.png)
-[![Browse Listings](images/listing.png)
+![Home Page](images/home.png)
+![Home Page II](images/home2.png)
+![Edit Listing](images/editlisting.png)
+![2FA Authentification](images/2FA.png)
+![Cart](images/cart.png)
+![Browse Listings](images/listing.png)
 ## 🚀 Executive Summary
 
 **Thrifto** represents a sophisticated, enterprise-grade sustainable marketplace platform architected with cutting-edge technologies and modern software engineering principles. This full-stack application demonstrates mastery of contemporary web development paradigms, cloud infrastructure integration, and scalable system design.
@@ -324,3 +325,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 *Thrifto - Where Sustainability Meets Technology Excellence* 🌱💻
+=======
+# MPP
+Vinted type application with user-to-user interaction, different payment options, email alerts and more.
+>>>>>>> origin/main

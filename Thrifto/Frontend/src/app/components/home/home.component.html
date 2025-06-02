@@ -1,0 +1,56 @@
+<!-- src/app/components/home/home.component.html -->
+<div class="home-container">
+  <section class="hero">
+    <div class="container">
+      <h1>Buy and Sell Pre-Loved Clothing</h1>
+      <p>Find unique fashion or give your clothes a second life!</p>
+      <app-search-bar [liveUpdate]="false"
+                      (searchQuery)="onSearch($event)">
+      </app-search-bar>
+    </div>
+  </section>
+
+  <section class="featured">
+    <div class="container">
+      <h2>Featured Items</h2>
+      <div class="loading-spinner" *ngIf="isLoading"></div>
+      <div class="listings-grid" *ngIf="!isLoading">
+        <div class="listing-card" *ngFor="let listing of featuredListings">
+          <app-listing-item [listing]="listing"></app-listing-item>
+        </div>
+        <div class="no-results" *ngIf="!isLoading && featuredListings.length === 0">
+          No featured listings available at the moment.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="categories">
+    <div class="container">
+      <h2>Shop by Quality</h2>
+      <div class="quality-cards">
+        <div class="quality-card" *ngFor="let quality of qualities" (click)="filterByQuality(quality.value)">
+          <h3>{{ quality.label }}</h3>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="new-arrivals">
+    <div class="container">
+      <h2>New Arrivals</h2>
+      <div class="loading-spinner" *ngIf="isLoading"></div>
+      <div class="listings-grid" *ngIf="!isLoading">
+        <div class="listing-card" *ngFor="let listing of recentListings">
+          <app-listing-item [listing]="listing"></app-listing-item>
+        </div>
+        <div class="no-results" *ngIf="!isLoading && recentListings.length === 0">
+          No recent listings available at the moment.
+        </div>
+      </div>
+      <div class="view-all">
+        <a routerLink="/new-listings" class="btn">View All New Listings</a>
+      </div>
+    </div>
+  </section>
+</div>
