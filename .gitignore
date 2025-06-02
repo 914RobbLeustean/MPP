@@ -1,1 +1,70 @@
-.angular/cache/
+# Node modules
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+
+
+# Angular cache and build files
+@angular/cache/
+.cache/
+.angular/
+dist/
+tmp/
+out-tsc/
+bazel-out/
+
+# Visual Studio / .NET
+.vs/
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+build/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Upload directories (user-generated content)
+wwwroot/uploads/
+uploads/
+
+# Package lock files (optional)
+# package-lock.json
+
+# Git cache and objects
+.git/objects/
+.git/logs/
