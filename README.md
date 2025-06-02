@@ -261,7 +261,7 @@ Thrifto.Server/
 ### **Quick Start**
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/Thrifto.git
+git clone https://github.com/914RobbLeustean/Thrifto.git
 cd Thrifto
 
 # Backend setup
@@ -381,8 +381,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🤝 Contact & Collaboration
 
-**Project Maintainer**: [Leustean Robert]  
-**Email**: [leustean.robertgeorge@gmail.com]
+**Project Maintainer**: Leustean Robert 
+**Email**: leustean.robertgeorge@gmail.com
 
 ---
 
