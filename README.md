@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # 🛍️ Thrifto - Premium Sustainable Marketplace Platform
 
 ![Home Page](images/home.png)
@@ -126,21 +125,84 @@ Built as a testament to advanced technical proficiency, Thrifto showcases expert
 ```
 thrifto.client/
 ├── src/
+│   ├── index.html
+│   ├── main.ts
+│   ├── styles.css
+│   ├── styles.scss
 │   ├── app/
-│   │   ├── components/          # Feature components
-│   │   │   ├── auth/           # Authentication modules
-│   │   │   ├── dashboard/      # User dashboard
-│   │   │   ├── chat/           # Real-time messaging
-│   │   │   ├── listing-detail/ # Product details
-│   │   │   └── shared/         # Reusable components
-│   │   ├── services/           # Business logic layer
-│   │   │   ├── auth.service.ts
-│   │   │   ├── signalr.service.ts
-│   │   │   └── indexed-db.service.ts
-│   │   ├── guards/             # Route protection
-│   │   ├── interceptors/       # HTTP middleware
-│   │   └── models/             # TypeScript interfaces
-│   └── assets/                 # Static resources
+│   │   ├── app-routing.module.ts
+│   │   ├── app.component.ts
+│   │   ├── app.component.html
+│   │   ├── app.component.scss
+│   │   ├── app.component.css
+│   │   ├── app.component.spec.ts
+│   │   ├── app.module.ts
+│   │   ├── components/             # Feature components
+│   │   │   ├── about/
+│   │   │   ├── account-settings/
+│   │   │   ├── auth/               # Authentication
+│   │   │   │   ├── login/
+│   │   │   │   └── register/
+│   │   │   ├── cart/
+│   │   │   ├── chat/               # Real-time messaging
+│   │   │   ├── contact/
+│   │   │   ├── dashboard/          # User dashboard
+│   │   │   ├── edit-listing/
+│   │   │   ├── faq/
+│   │   │   ├── feedback/
+│   │   │   ├── home/
+│   │   │   ├── listing-detail/     # Product detail view
+│   │   │   ├── new-listings/
+│   │   │   ├── policy/             # Policy and blog
+│   │   │   │   ├── blog/
+│   │   │   │   ├── privacy-policy/
+│   │   │   │   ├── return-policy/
+│   │   │   │   ├── shipping-policy/
+│   │   │   │   └── terms-of-service/
+│   │   │   ├── search/
+│   │   │   ├── security-center/
+│   │   │   ├── security-help/
+│   │   │   ├── sell/
+│   │   │   └── shared/             # Reusable components
+│   │   │       ├── footer/
+│   │   │       ├── header/
+│   │   │       ├── listing-item/
+│   │   │       ├── network-status/
+│   │   │       ├── notification/
+│   │   │       ├── price-range-filter/
+│   │   │       └── search-bar/
+│   │   ├── directives/             # Custom directives
+│   │   │   └── infinite-scroll.directive.ts
+│   │   ├── guards/                 # Route guards
+│   │   │   └── auth.guards.ts
+│   │   ├── interceptors/           # HTTP interceptors
+│   │   │   ├── auth.interceptor.ts
+│   │   │   └── error.interceptor.ts
+│   │   ├── models/                 # TypeScript models
+│   │   │   ├── chat-message.model.ts
+│   │   │   ├── feedback.model.ts
+│   │   │   ├── listing.model.ts
+│   │   │   ├── two-factor.model.ts
+│   │   │   └── user.model.ts
+│   │   └── services/               # Business logic
+│   │       ├── auth.service.ts
+│   │       ├── cart.service.ts
+│   │       ├── chat.service.ts
+│   │       ├── feedback.service.ts
+│   │       ├── indexed-db.service.ts
+│   │       ├── listing.service.ts
+│   │       ├── network.service.ts
+│   │       ├── notification.service.ts
+│   │       ├── offline-queue.service.ts
+│   │       ├── pagination.service.ts
+│   │       ├── signalr.service.ts
+│   │       └── user.service.ts
+│   ├── assets/                     # Static assets
+│   │   ├── images/
+│   └── environments/              # Environment configs
+│       ├── environment.prod.ts
+│       └── environment.ts
+
 ```
 
 ### **Backend Architecture (.NET Core)**
@@ -326,6 +388,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 *Thrifto - Where Sustainability Meets Technology Excellence* 🌱💻
 =======
-# MPP
-Vinted type application with user-to-user interaction, different payment options, email alerts and more.
->>>>>>> origin/main
+
