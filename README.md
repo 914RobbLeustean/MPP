@@ -1,5 +1,6 @@
 # 🛍️ Thrifto - Premium Sustainable Marketplace Platform
 
+## 🚀 Check the Demo
 [![Watch the demo](https://img.youtube.com/vi/kmgUImZh9HE/0.jpg)](https://youtu.be/kmgUImZh9HE?si=-C0_n2Dd6vf0p26S)
 ![Home Page](images/home.png)
 ![Home Page II](images/home2.png)
