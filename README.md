@@ -112,6 +112,8 @@ Built as a testament to advanced technical proficiency, Thrifto showcases expert
 - **Statistics Dashboard** with key performance indicators
 - **Feedback System** with rating and review capabilities
 - **Blog Platform** for content marketing and SEO
+- **Payment Gateway** integration (Stripe/PayPal)
+
 
 ### **🔒 Enterprise Security Features**
 - **Two-Factor Authentication** with TOTP implementation
@@ -359,8 +361,6 @@ ng serve
 - **Blockchain** integration for authenticity verification
 - **Advanced Analytics** with business intelligence
 - **Multi-language** internationalization support
-- **Payment Gateway** integration (Stripe/PayPal)
-
 ---
 
 ## 👨‍💻 Developer Profile
